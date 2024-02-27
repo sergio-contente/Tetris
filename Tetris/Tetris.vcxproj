@@ -133,13 +133,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="GameEngine.cpp" />
+    <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="Tetris.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameEngine.h" />
-    <ClInclude Include="GameState.h" />
+    <ClInclude Include="StateManager.h" />
+    <ClInclude Include="State.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

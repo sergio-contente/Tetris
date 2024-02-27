@@ -21,15 +21,15 @@
     <ClCompile Include="GameState.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
-    <ClCompile Include="GameEngine.cpp">
+    <ClCompile Include="StateManager.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GameState.h">
+    <ClInclude Include="State.h">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
-    <ClInclude Include="GameEngine.h">
+    <ClInclude Include="StateManager.h">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
   </ItemGroup>
