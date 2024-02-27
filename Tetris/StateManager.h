@@ -24,6 +24,8 @@ public:
 	bool Running() { return m_running; }
 	void Quit() { m_running = false; }
 
+	bool IsEmpty() const;
+
 private:
 	// the stack of states
 	std::vector<State*> states;

@@ -59,3 +59,7 @@ void StateManager::Draw() {
         states.back()->Draw();
     }
 }
+
+bool StateManager::IsEmpty() const {
+    return states.empty();
+}
