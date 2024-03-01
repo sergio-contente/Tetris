@@ -1,11 +1,14 @@
-#include "SFML/Graphics.hpp"
-#include "SFML/Network.hpp"
-#include "SFML/System.hpp"
-#include "SFML/Window.hpp"
+#include <SFML/Graphics.hpp>
 #include <iostream>
+
+#include "Game.h"
 
 using namespace sf;
 
-int main() {
-	
+int main()
+{
+    Game game;
+    game.Run();
+
+    return 0;
 }

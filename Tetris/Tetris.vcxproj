@@ -134,18 +134,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AssetManager.cpp" />
+    <ClCompile Include="Board.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="Tetris.cpp" />
+    <ClCompile Include="Tetronimo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetManager.h" />
+    <ClInclude Include="Board.h" />
     <ClInclude Include="Context.hpp" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="State.h" />
+    <ClInclude Include="Tetronimo.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Tetris.rc" />

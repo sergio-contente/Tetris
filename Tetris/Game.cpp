@@ -1,11 +1,10 @@
 #include "Game.h"
-#include "MainMenu.hpp"
-#include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/Window/Event.hpp>
 
 Game::Game() : m_context(std::make_shared<Context>())
 {
-    m_context->m_window->create(sf::VideoMode(640, 352), "Snake Game", sf::Style::Close);
-    m_context->m_states->PushState(std::make_unique<MainMenu>(m_context));
+    m_context->m_window->create(sf::VideoMode(640, 352), "Tetris", sf::Style::Close);
+    //Add first state to m_states here
 }
 
 Game::~Game()
