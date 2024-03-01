@@ -2,7 +2,8 @@
 #define __STATEMANAGER_H__
 
 #include <iostream>
-#include <vector>
+#include <stack>
+#include <memory>
 
 #include "State.h"
 
@@ -13,24 +14,22 @@ public:
 	~StateManager();
 
 
-	void ChangeState(State* state);
-	void PushState(State* state);
-	void PopState();
-
-	void HandleEvents();
-	void Update(sf::Time deltaTime);
-	void Draw();
-
-	bool Running() { return m_running; }
-	void Quit() { m_running = false; }
-
-	bool IsEmpty() const;
+    void Add(std::unique_ptr<State> toAdd, bool replace = false);
+    void PopCurrent();
+    void PopAll();
+    void ProcessStateChange();
+    std::unique_ptr<State>& GetCurrent();
+    bool IsEmpty() const;
 
 private:
-	// the stack of states
-	std::vector<State*> states;
+    std::stack<std::unique_ptr<State>> m_stateStack;
+    std::unique_ptr<State> m_newState;
 
-	bool m_running;
+    bool m_add;
+    bool m_replace;
+    bool m_remove;
+    bool m_removeAll;
+
 };
 
 #endif // !__STATEMANAGER_H__

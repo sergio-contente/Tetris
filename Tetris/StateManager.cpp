@@ -1,65 +1,80 @@
 #include "StateManager.h"
 
-StateManager::StateManager() : m_running(true) {
+StateManager::StateManager() : m_add(false), m_replace(false), m_remove(false), m_removeAll(false)
+{
 }
 
-StateManager::~StateManager() {
-    while (!states.empty()) {
-        delete states.back();
-        states.pop_back();
+StateManager::~StateManager()
+{
+}
+
+void StateManager::Add(std::unique_ptr<State> toAdd, bool replace)
+{
+    m_add = true;
+    m_newState = std::move(toAdd);
+
+    m_replace = replace;
+}
+
+void StateManager::PopCurrent()
+{
+    m_remove = true;
+}
+
+void StateManager::PopAll()
+{
+    m_removeAll = true;
+    m_remove = false;
+}
+
+void StateManager::ProcessStateChange()
+{
+    if (m_removeAll)
+    {
+        while (!m_stateStack.empty())
+        {
+            m_stateStack.pop();
+        }
+        m_removeAll = false;
+    }
+    else if (m_remove && (!m_stateStack.empty()))
+    {
+        m_stateStack.pop();
+
+        if (!m_stateStack.empty())
+        {
+            m_stateStack.top()->Start();
+        }
+
+        m_remove = false;
+    }
+
+    if (m_add)
+    {
+        if (m_replace && (!m_stateStack.empty()))
+        {
+            m_stateStack.pop();
+            m_replace = false;
+        }
+
+        if (!m_stateStack.empty())
+        {
+            m_stateStack.top()->Pause();
+        }
+
+        m_stateStack.push(std::move(m_newState));
+        m_stateStack.top()->Init();
+        m_stateStack.top()->Start();
+        m_add = false;
     }
 }
 
-void StateManager::ChangeState(State* state) {
-    while (!states.empty()) {
-        states.back()->Cleanup();
-        delete states.back();
-        states.pop_back();
-    }
-
-    states.push_back(state);
-    states.back()->Init();
+std::unique_ptr<State>& StateManager::GetCurrent()
+{
+    return m_stateStack.top();
 }
 
-void StateManager::PushState(State* state) {
-    if (!states.empty()) {
-        states.back()->Pause();
-    }
-
-    states.push_back(state);
-    states.back()->Init();
-}
-
-void StateManager::PopState() {
-    if (!states.empty()) {
-        states.back()->Cleanup();
-        delete states.back();
-        states.pop_back();
-    }
-
-    if (!states.empty()) {
-        states.back()->Resume();
-    }
-}
-
-void StateManager::HandleEvents() {
-    if (!states.empty()) {
-        states.back()->HandleEvents();
-    }
-}
-
-void StateManager::Update(sf::Time deltaTime) {
-    if (!states.empty()) {
-        states.back()->Update(deltaTime);
-    }
-}
-
-void StateManager::Draw() {
-    if (!states.empty()) {
-        states.back()->Draw();
-    }
-}
-
-bool StateManager::IsEmpty() const {
-    return states.empty();
+bool StateManager::IsEmpty() const
+{
+    return m_stateStack.empty();
 }

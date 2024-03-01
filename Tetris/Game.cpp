@@ -1,37 +1,43 @@
+#include <SFML/Graphics/CircleShape.hpp>
+
 #include "Game.h"
-#include <SFML/Window/Event.hpp>
+#include "StartMenuState.h"
 
 Game::Game() : m_context(std::make_shared<Context>())
 {
     m_context->m_window->create(sf::VideoMode(640, 352), "Tetris", sf::Style::Close);
-    //Add first state to m_states here
+    m_context->m_states->Add(std::make_unique<StartMenuState>(m_context));
 }
 
 Game::~Game()
 {
-    // Limpeza, se necessário...
 }
 
 void Game::Run()
 {
     sf::Clock clock;
+    sf::Time timeSinceLastFrame = sf::Time::Zero;
 
     while (m_context->m_window->isOpen())
     {
-        sf::Time elapsedTime = clock.restart();
-        m_context->m_states->HandleEvents();
+        timeSinceLastFrame += clock.restart();
 
-        if (!m_context->m_states->IsEmpty())
+        while (timeSinceLastFrame > TIME_PER_FRAME)
         {
-            m_context->m_states->HandleEvents();
-            m_context->m_states->Update(elapsedTime);
-            m_context->m_window->clear();
-            m_context->m_states->Draw();
-            m_context->m_window->display();
-        }
-        else
-        {
-            m_context->m_window->close();
+            timeSinceLastFrame -= TIME_PER_FRAME;
+
+            m_context->m_states->ProcessStateChange();
+
+            if (!m_context->m_states->IsEmpty())
+            {
+                m_context->m_states->GetCurrent()->ProcessInput();
+                m_context->m_states->GetCurrent()->Update(TIME_PER_FRAME);
+                m_context->m_states->GetCurrent()->Draw();
+            }
+            else
+            {
+                m_context->m_window->close();
+            }
         }
     }
 }

@@ -136,6 +136,8 @@
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GamePlayState.cpp" />
+    <ClCompile Include="StartMenuState.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="Tetris.cpp" />
@@ -146,14 +148,19 @@
     <ClInclude Include="Board.h" />
     <ClInclude Include="Context.hpp" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GamePlayState.h" />
     <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="StartMenuState.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="Tetronimo.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Tetris.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="assets\Computerfont.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
