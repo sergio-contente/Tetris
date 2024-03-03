@@ -4,7 +4,7 @@ GamePlayState::GamePlayState(std::shared_ptr <Context> &context) :
 m_context(context), m_tetromino(nullptr), m_preview(nullptr), 
 m_HighScore(), mElapsedTime(sf::Time::Zero), mID(getRandomNumber(7))
 {
-    m_context->m_assets->LoadFont("Blocks", "assets/Blocks.png");
+    m_context->m_assets->LoadTexture("Blocks", "assets/Blocks.png");
     mTexture = m_context->m_assets->GetTexture("Blocks");
     this->m_board = std::make_unique<Board>(sf::Vector2i{ 10, 18 }, *this);
     createTetromino();
