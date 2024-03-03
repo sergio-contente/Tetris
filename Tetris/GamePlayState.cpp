@@ -15,7 +15,7 @@ GamePlayState::~GamePlayState() {
 }
 
 void GamePlayState::Init() {
-
+    
 }
 
 void GamePlayState::createTetromino() {
@@ -87,6 +87,13 @@ bool GamePlayState::isOccupied(int x, int y) {
 
 
 void GamePlayState::Update(const sf::Time& deltaTime) {
+    sf::Clock clock;
+    sf::Time trigger{ sf::seconds(85.f / (85.f + (m_HighScore.getLevel() * (m_HighScore.getLevel() * 5.f)))) };
+    mElapsedTime += deltaTime;
+    if (mElapsedTime > trigger) {
+        mElapsedTime = sf::Time::Zero;
+        proceed(Direction::Down);
+    }
     m_board->update(deltaTime);
     m_HighScore.update(deltaTime);
     if (!m_tetromino) {
