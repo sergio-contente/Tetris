@@ -1,89 +1,62 @@
-#pragma once
-#include <vector>
-#include <SFML/Graphics.hpp>
 
-#include "Tetronimo.h"
+#ifndef BOARD_H
+#define BOARD_H
 
-class Board {
-private:
-    const int width = 10;
-    const int height = 20;
-    std::vector<std::vector<sf::Color>> grid; // 2D grid representing the board
 
-public:
-    Board() : grid(height, std::vector<sf::Color>(width, sf::Color::Black)) {}
+#include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/System/Time.hpp>
+#include <array>
+#include <unordered_map>
 
-    // Accessor for the grid for drawing purposes
-    const std::vector<std::vector<sf::Color>>& getGrid() const {
-        return grid;
-    }
+class Game;
+struct FieldInfo {
+    FieldInfo(sf::Texture& texture, int id);
+    sf::Sprite          mSprite;
 
-    // Check if a move or rotation is possible
-    bool isMovePossible(const Tetromino& tetromino, sf::Vector2i direction) const {
-        auto shape = tetromino.getShape();
-        auto pos = tetromino.getPosition() + direction;
 
-        for (int i = 0; i < 4; ++i) {
-            for (int j = 0; j < 4; ++j) {
-                if (shape[i][j]) {
-                    int newX = pos.x + j;
-                    int newY = pos.y + i;
+};
+struct Field {
 
-                    // Check boundaries
-                    if (newX < 0 || newX >= width || newY < 0 || newY >= height) return false;
-
-                    // Check if the position is already filled
-                    if (grid[newY][newX] != sf::Color::Black) return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    // Add a tetromino to the board
-    void lockTetromino(const Tetromino& tetromino) {
-        auto shape = tetromino.getShape();
-        auto pos = tetromino.getPosition();
-        auto color = tetromino.getColor();
-
-        for (int i = 0; i < 4; ++i) {
-            for (int j = 0; j < 4; ++j) {
-                if (shape[i][j]) {
-                    int newX = pos.x + j;
-                    int newY = pos.y + i;
-
-                    // Fill the cell with the tetromino's color
-                    grid[newY][newX] = color;
-                }
-            }
-        }
-    }
-
-    // Clear completed lines
-    void clearLines() {
-        for (int row = 0; row < height; ++row) {
-            bool isLineComplete = true;
-            for (int col = 0; col < width; ++col) {
-                if (grid[row][col] == sf::Color::Black) {
-                    isLineComplete = false;
-                    break;
-                }
-            }
-
-            if (isLineComplete) {
-                for (int clearRow = row; clearRow > 0; --clearRow) {
-                    for (int col = 0; col < width; ++col) {
-                        grid[clearRow][col] = grid[clearRow - 1][col];
-                    }
-                }
-
-                // Clear the top row
-                for (int col = 0; col < width; ++col) {
-                    grid[0][col] = sf::Color::Black;
-                }
-            }
-        }
-    }
+    Field& operator=(const Field& field);
+    bool mOccupied = false;
+    bool mVisible = true;
+    FieldInfo* mInfo = nullptr;
 };
 
 
+class Board {
+public:
+    Board(sf::Vector2i size, Game& game);
+    Board(const Board& other) = delete;
+    Board& operator= (const Board& other) = delete;
+
+    void update(const sf::Time& dt);
+    void clean();
+    void addBlock(int id, std::array<sf::Vector2i, 4> block);
+    bool isOccupied(std::array<sf::Vector2i, 4> block);
+    void draw(sf::RenderWindow& window);
+    void printBoard();
+    inline bool isToRemoveBlocks() const { return mToRemoveBlocks; }
+    Field* getField(int x, int y);
+private:
+    int convert2D_to_1D(int x, int y);
+    void cleanLines();
+    void markLinesForRemoval();
+    void blink();
+
+    Game& mGame;
+    std::unordered_map<unsigned int, std::unique_ptr<Field>>        mFields;
+    std::unordered_map<unsigned int, std::unique_ptr<FieldInfo>>    mFieldInfos;
+    sf::Vector2i                                                    mSize;
+    std::vector<int>                                                mYCleaned;
+    float                                                           mElapsedTime;
+    bool                                                            mToRemoveBlocks;
+
+
+};
+
+
+#endif //BOARD_H
