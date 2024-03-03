@@ -1,11 +1,12 @@
 #include "GamePlayState.h"
 
-GamePlayState::GamePlayState(std::shared_ptr <Context> &context, std::unique_ptr <Tetromino>& m_tetromino, std::unique_ptr<Tetromino>& m_preview, std::unique_ptr<Board> m_board) : m_context(context), m_tetromino(nullptr), m_preview(nullptr), 
-m_board(), m_HighScore(), mElapsedTime(sf::Time::Zero), mID(getRandomNumber(7))
+GamePlayState::GamePlayState(std::shared_ptr <Context> &context) :
+m_context(context), m_tetromino(nullptr), m_preview(nullptr), 
+m_HighScore(), mElapsedTime(sf::Time::Zero), mID(getRandomNumber(7))
 {
     m_context->m_assets->LoadFont("Blocks", "assets/Blocks.png");
     mTexture = m_context->m_assets->GetTexture("Blocks");
-    m_board = std::make_unique<Board>(sf::Vector2i{ 10, 18 }, *this);
+    this->m_board = std::make_unique<Board>(sf::Vector2i{ 10, 18 }, *this);
     createTetromino();
 }
 
@@ -57,7 +58,7 @@ void GamePlayState::ProcessInput() {
                 rotate();
             }
             else if (e.key.code == sf::Keyboard::P) {
-                m_board->printGrid();
+                m_board->printBoard();
             }
             else if (e.key.code == sf::Keyboard::I) {
                 m_HighScore.addClearedLines(10);
@@ -98,9 +99,13 @@ void GamePlayState::Update(const sf::Time& deltaTime) {
 }
 void GamePlayState::Draw() {
     m_context->m_window->clear(sf::Color::Blue);
-    m_HighScore.draw(m_context->m_window);
-    m_board->draw(m_context->m_window);
-
+    m_HighScore.draw(*m_context->m_window);
+    m_board->draw(*m_context->m_window);
+    if (m_tetromino) {
+        m_context->m_window->draw(*m_tetromino);
+    }
+    m_context->m_window->draw(*m_preview);
+    m_context->m_window->display();
 }
 
 void GamePlayState::Pause() {

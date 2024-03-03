@@ -1,4 +1,5 @@
 #include "StartMenuState.h"
+#include "GamePlayState.h"
 
 StartMenuState::StartMenuState(std::shared_ptr <Context> &context) : m_context(context), m_isPlayButtonSelected(true),
 m_isPlayButtonPressed(false), m_isExitButtonPressed(false), m_isExitButtonSelected(false)
@@ -102,7 +103,7 @@ void StartMenuState::Update(const sf::Time& deltaTime) {
 
 	if (m_isPlayButtonPressed)
 	{
-		//m_context->m_states->Add(std::make_unique<GamePlay>(m_context), true);
+		m_context->m_states->Add(std::make_unique<GamePlayState>(m_context), true);
 	}
 	else if (m_isExitButtonPressed)
 	{

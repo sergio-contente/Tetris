@@ -1,11 +1,4 @@
 #include "Board.h"
-#include "Game.h"
-#include "Utils.h"
-#include "Highscore.h"
-
-#include <iostream>
-#include <algorithm>
-#include <fstream>
 
 FieldInfo::FieldInfo(sf::Texture& texture, int id) {
     sf::IntRect rect{ (id % 7) * 18, 0, 18,18 };
@@ -20,7 +13,7 @@ Field& Field::operator=(const Field& field) {
     return *this;
 }
 
-Board::Board(sf::Vector2i size, Game& game)
+Board::Board(sf::Vector2i size, GamePlayState& game)
     : mGame(game), mFields(), mFieldInfos(), mSize(size), mYCleaned(), mElapsedTime(0.f), mToRemoveBlocks(false) {
     for (int x = 0; x < size.x; ++x) {
         for (int y = 0; y < size.y; ++y) {
@@ -108,7 +101,7 @@ void Board::markLinesForRemoval() {
         }
         counter = 0;
     }
-    mGame.mHighScore.addClearedLines(countClearedLines);
+    mGame.m_HighScore.addClearedLines(countClearedLines);
     std::sort(mYCleaned.begin(), mYCleaned.end(), [](int left, int right) { return left < right; });
 }
 

@@ -11,6 +11,14 @@
 #include <array>
 #include <unordered_map>
 
+#include "GamePlayState.h"
+#include "Utils.h"
+#include "Highscore.h"
+
+#include <iostream>
+#include <algorithm>
+#include <fstream>
+
 class Game;
 struct FieldInfo {
     FieldInfo(sf::Texture& texture, int id);
@@ -26,10 +34,11 @@ struct Field {
     FieldInfo* mInfo = nullptr;
 };
 
+class GamePlayState;
 
 class Board {
 public:
-    Board(sf::Vector2i size, Game& game);
+    Board(sf::Vector2i size, GamePlayState& game);
     Board(const Board& other) = delete;
     Board& operator= (const Board& other) = delete;
 
@@ -47,7 +56,7 @@ private:
     void markLinesForRemoval();
     void blink();
 
-    Game& mGame;
+    GamePlayState& mGame;
     std::unordered_map<unsigned int, std::unique_ptr<Field>>        mFields;
     std::unordered_map<unsigned int, std::unique_ptr<FieldInfo>>    mFieldInfos;
     sf::Vector2i                                                    mSize;

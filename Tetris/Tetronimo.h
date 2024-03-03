@@ -2,6 +2,10 @@
 
 #include <array>
 #include <SFML/Graphics.hpp>
+#include <SFML/Graphics/RenderTarget.hpp>
+#include <iostream>
+
+#include "Direction.h"
 
 class Tetromino : public sf::Drawable {
 public:

@@ -3,7 +3,7 @@
 Highscore::Highscore()
     : mFont(), mLevelText(), mScoreText(), mClearedLinesText(), mScore(0), mLoadSoftScore(0),
     mLinesCleared(0) {
-    mFont.loadFromFile("Dong.ttf");
+    mFont.loadFromFile("assets/Computerfont.ttf");
     mScoreText.setFont(mFont);
     mScoreText.setCharacterSize(15);
 

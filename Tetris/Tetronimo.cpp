@@ -1,6 +1,4 @@
 #include "Tetronimo.h"
-#include <SFML/Graphics/RenderTarget.hpp>
-#include <iostream>
 
 /*
  * Block Shape 4 x 4

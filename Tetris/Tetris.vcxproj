@@ -143,6 +143,7 @@
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="Tetris.cpp" />
     <ClCompile Include="Tetronimo.cpp" />
+    <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetManager.h" />

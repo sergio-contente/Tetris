@@ -1,20 +1,14 @@
 #pragma once
-
+#pragma once
 
 #include <random>
-
 #include <chrono>
-std::default_random_engine engine{ static_cast<unsigned int>(
-        std::chrono::system_clock::now().time_since_epoch().count()) };
 
+// Declaração da variável engine
+extern std::default_random_engine engine;
 
-int getRandomNumber(int max) {
-    std::uniform_int_distribution<int> int_distribution(max);
-    return int_distribution(engine);
-}
+// Declaração das funções
+extern int getRandomNumber(int max);
+extern int getRandomNumber(int min, int max);
 
-int getRandomNumber(int min, int max) {
-    std::uniform_int_distribution<int> int_distribution(min, max);
-    return int_distribution(engine);
-}
 

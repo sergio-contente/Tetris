@@ -10,19 +10,21 @@
 #include "Utils.h"
 #include "Direction.h"
 
+class Board;
+
 class GamePlayState : public State
 {
 private:
-	std::shared_ptr <Context>m_context;
-    std::unique_ptr <Tetromino>m_tetromino;
-    std::unique_ptr <Tetromino>m_preview;
-    std::unique_ptr <Board>m_board;
-    sf::Texture   mTexture;
-    Highscore m_HighScore;
+	std::shared_ptr <Context> m_context;
+    std::unique_ptr <Tetromino> m_tetromino;
+    std::unique_ptr <Tetromino >m_preview;
+    std::unique_ptr <Board> m_board;
     sf::Time mElapsedTime;
     int mID;
 public:
-	GamePlayState(std::shared_ptr <Context> &context, std::unique_ptr <Tetromino> &m_tetromino, std::unique_ptr<Tetromino> &m_preview, std::unique_ptr<Board> m_board);
+    Highscore m_HighScore;
+    sf::Texture   mTexture;
+	GamePlayState(std::shared_ptr <Context> &context);
 	~GamePlayState();
 
     virtual void Init() override;
