@@ -14,6 +14,7 @@ public:
     void addClearedLines(int num);
     void update(const sf::Time& dt);
     int getLevel() const;
+    int getScore();
 private:
     sf::Font            mFont;
     sf::Text            mLevelText;

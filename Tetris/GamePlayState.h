@@ -9,6 +9,7 @@
 #include "Highscore.h"
 #include "Utils.h"
 #include "Direction.h"
+#include "GameOverState.h"
 
 class Board;
 
@@ -23,6 +24,7 @@ private:
     int mID;
 public:
     Highscore m_HighScore;
+    int lastHighScore;
     sf::Texture   mTexture;
 	GamePlayState(std::shared_ptr <Context> &context);
 	~GamePlayState();
