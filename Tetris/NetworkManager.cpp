@@ -91,3 +91,8 @@ void NetworkManager::Disconnect() {
         peer = nullptr;
     }
 }
+
+bool NetworkManager::IsConnected() {
+    return (client != nullptr && peer != nullptr);
+}
+

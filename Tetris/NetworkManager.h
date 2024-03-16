@@ -13,6 +13,7 @@ public:
     bool StartConnection(const std::string& address, uint16_t port);
     void ProcessNetworkEvents();
     void Disconnect();
+    bool IsConnected();
 
 private:
     ENetHost* client = nullptr;
