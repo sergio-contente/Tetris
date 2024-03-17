@@ -32,6 +32,7 @@ void Board::addBlock(int id, std::array<sf::Vector2i, 4> block) {
         field->mInfo = mFieldInfos[id].get();
     }
 }
+
 int Board::convert2D_to_1D(int x, int y) {
     return y * mSize.x + x;
 }
@@ -53,7 +54,6 @@ void Board::draw(sf::RenderWindow& window) {
 Field* Board::getField(int x, int y) {
     return mFields[convert2D_to_1D(x, y)].get();
 }
-
 
 void Board::clean() {
     for (int x = 0; x < mSize.x; ++x) {

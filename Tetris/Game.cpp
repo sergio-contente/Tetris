@@ -1,11 +1,15 @@
-#include <SFML/Graphics/CircleShape.hpp>
-
+#include <SFML/Graphics.hpp>
 #include "Game.h"
 #include "StartMenuState.h"
 
 Game::Game() : m_context(std::make_shared<Context>())
 {
-    m_context->m_window->create(sf::VideoMode(640, 352), "Tetris", sf::Style::Close);
+    // Get the desktop resolution
+    sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
+
+    // Create the window in full screen mode with the desktop resolution
+    m_context->m_window->create(desktop, "Tetris", sf::Style::Fullscreen);
+
     m_context->m_states->Add(std::make_unique<StartMenuState>(m_context));
 }
 

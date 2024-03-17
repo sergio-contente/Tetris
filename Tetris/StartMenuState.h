@@ -12,6 +12,9 @@ private:
 	sf::Text m_gameTitle;
 	sf::Text m_playButton;
 	sf::Text m_exitButton;
+	sf::Texture m_backgroundTexture;
+	sf::Sprite m_backgroundSprite;
+	sf::Sprite m_logoSprite;
 
 	bool m_isPlayButtonSelected;
 	bool m_isPlayButtonPressed;
