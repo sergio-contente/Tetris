@@ -2,9 +2,9 @@
 #include "StartMenuState.h"
 
 
-Game::Game() : m_context(std::make_shared<Context>()) {
+Game::Game() : m_context(std::make_shared<Context>()), m_networkManager(std::make_shared<NetworkManager>()) {
     m_context->m_window->create(sf::VideoMode(640, 352), "Tetris", sf::Style::Close);
-    m_context->m_states->Add(std::make_unique<StartMenuState>(m_context, m_networkManager.get()), false);
+    m_context->m_states->Add(std::make_unique<StartMenuState>(m_context, m_networkManager), false);
 }
 
 Game::~Game()

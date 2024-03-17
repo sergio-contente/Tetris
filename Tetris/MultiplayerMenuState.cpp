@@ -1,12 +1,14 @@
 #include "MultiplayerMenuState.h"
 
-MultiplayerMenuState::MultiplayerMenuState(std::shared_ptr <Context>& context, NetworkManager* m_networkManager) :
-    m_context(context),
+MultiplayerMenuState::MultiplayerMenuState(std::shared_ptr <Context>& m_context, std::shared_ptr<NetworkManager>& networkManager):
+    m_context(m_context),
     m_isHostButtonSelected(true),
     m_isHostButtonPressed(false),
     m_isClientButtonSelected(false),
     m_isClientButtonPressed(false),
-    m_networkManager(m_networkManager)
+    m_isExitButtonPressed(false),
+    m_isExitButtonSelected(false),
+    m_networkManager(networkManager)
 {}
 
 MultiplayerMenuState::~MultiplayerMenuState() {}

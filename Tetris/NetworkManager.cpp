@@ -77,30 +77,39 @@ bool NetworkManager::StartHost(uint16_t port) {
     return true;
 }
 
-
-
 void NetworkManager::ProcessNetworkEvents() {
     ENetEvent event;
     while (enet_host_service(client, &event, 0) > 0) {
+        std::cout << "Processing network events...\n";
+        if (client == nullptr) {
+            std::cerr << "Client pointer is null.\n";
+            return;
+        }
+        // Agora é seguro processar eventos de rede
         switch (event.type) {
         case ENET_EVENT_TYPE_RECEIVE:
-            std::cout << "A packet of length " << event.packet->dataLength
-                << " containing " << event.packet->data
-                << " was received from " << event.peer->data
-                << " on channel " << event.channelID << ".\n";
-            // Clean up the packet now that we're done using it.
-            enet_packet_destroy(event.packet);
+            if (event.peer != nullptr && event.peer->data != nullptr) {
+                std::cout << "A packet of length " << event.packet->dataLength
+                    << " containing " << event.packet->data
+                    << " was received from " << event.peer->data
+                    << " on channel " << event.channelID << ".\n";
+                // Clean up the packet now that we're done using it.
+                enet_packet_destroy(event.packet);
+            }
             break;
 
         case ENET_EVENT_TYPE_DISCONNECT:
-            std::cout << "Disconnection occurred.\n";
-            event.peer->data = nullptr;
+            if (event.peer != nullptr) {
+                std::cout << "Disconnection occurred.\n";
+                event.peer->data = nullptr;
+            }
             break;
 
             // Handle other events...
         }
     }
 }
+
 
 void NetworkManager::Disconnect() {
     if (peer != nullptr) {

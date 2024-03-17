@@ -27,10 +27,10 @@ private:
 	bool m_isExitButtonSelected;
 	bool m_isExitButtonPressed;
 
-	NetworkManager* m_networkManager;
+	std::shared_ptr<NetworkManager> m_networkManager;
 
 public:
-	MultiplayerMenuState(std::shared_ptr <Context>& m_context, NetworkManager* m_networkManager);
+	MultiplayerMenuState(std::shared_ptr <Context>& m_context, std::shared_ptr<NetworkManager>& networkManager);
 	~MultiplayerMenuState();
 
 	void Init() override;

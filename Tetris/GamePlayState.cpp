@@ -1,7 +1,7 @@
 #include "GamePlayState.h"
 
-GamePlayState::GamePlayState(std::shared_ptr <Context>& context) :
-    m_context(context), m_tetromino(nullptr), m_preview(nullptr),
+GamePlayState::GamePlayState(std::shared_ptr <Context>& context, std::shared_ptr <NetworkManager>& m_networkManager) :
+    m_context(context), m_networkManager(m_networkManager), m_tetromino(nullptr), m_preview(nullptr),
     m_HighScore(), mElapsedTime(sf::Time::Zero), mID(getRandomNumber(7))
 {
     m_context->m_assets->LoadTexture("Blocks", "assets/Blocks.png");
@@ -24,7 +24,7 @@ void GamePlayState::createTetromino() {
     if (m_board->isOccupied(m_tetromino->getBlockPositions())) {
         m_board->clean();
         this->lastHighScore = m_HighScore.getScore();
-        m_context->m_states->Add(std::make_unique<GameOverState>(m_context, this->lastHighScore), false);
+        m_context->m_states->Add(std::make_unique<GameOverState>(m_context, m_networkManager, this->lastHighScore), false);
         m_HighScore.reset();
     }
     mID = getRandomNumber(7);

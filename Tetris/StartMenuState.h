@@ -25,11 +25,11 @@ private:
 	bool m_isMultiplayerButtonSelected;
 	bool m_isMultiplayerButtonPressed;
 
-	NetworkManager* m_networkManager;
+	std::shared_ptr<NetworkManager> m_networkManager;
 
 
 public:
-	StartMenuState(std::shared_ptr <Context>& context, NetworkManager* networkManager);
+	StartMenuState(std::shared_ptr <Context>& context, std::shared_ptr<NetworkManager>& networkManager);
 	~StartMenuState();
 
 	void Init() override;

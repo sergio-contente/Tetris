@@ -17,6 +17,7 @@ class GamePlayState : public State
 {
 private:
 	std::shared_ptr <Context> m_context;
+    std::shared_ptr <NetworkManager> m_networkManager;
     std::unique_ptr <Tetromino> m_tetromino;
     std::unique_ptr <Tetromino >m_preview;
     std::unique_ptr <Board> m_board;
@@ -26,7 +27,7 @@ public:
     Highscore m_HighScore;
     int lastHighScore;
     sf::Texture   mTexture;
-	GamePlayState(std::shared_ptr <Context> &context);
+    GamePlayState(std::shared_ptr <Context>& context, std::shared_ptr <NetworkManager>& m_networkManager);
 	~GamePlayState();
 
     virtual void Init() override;

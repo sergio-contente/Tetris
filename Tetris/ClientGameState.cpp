@@ -1,7 +1,7 @@
 #include "ClientGameState.h"
 #include <iostream>
 
-ClientGameState::ClientGameState(std::shared_ptr<Context>& context, NetworkManager* networkManager)
+ClientGameState::ClientGameState(std::shared_ptr<Context>& context, std::shared_ptr<NetworkManager>& networkManager)
     : m_context(context), m_networkManager(networkManager) {
 }
 
@@ -10,8 +10,8 @@ ClientGameState::~ClientGameState() {
 }
 
 void ClientGameState::Init() {
-    // Tenta conectar ao servidor; substitua "localhost" e "12345" conforme apropriado
-    if (!m_networkManager->StartClient("localhost", 12345)) {
+    // Tenta conectar ao servidor; substitua "localhost" e "1234" conforme apropriado
+    if (!m_networkManager->StartClient("localhost", 1234)) {
         std::cerr << "Failed to connect to the host." << std::endl;
     }
     else {

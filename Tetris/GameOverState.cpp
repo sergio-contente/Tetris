@@ -1,11 +1,12 @@
 #include "GameOverState.h"
 
-GameOverState::GameOverState(std::shared_ptr <Context>&context, int lastHighScore) :
+GameOverState::GameOverState(std::shared_ptr <Context>&context, std::shared_ptr <NetworkManager>& m_networkManager, int lastHighScore) :
     m_context(context),
     m_isRetryButtonSelected(true),
     m_isRetryButtonPressed(false),
     m_isMainMenuButtonSelected(false),
     m_isMainMenuButtonPressed(false),
+    m_networkManager(m_networkManager),
     m_HighScore(lastHighScore)
 {}
 
@@ -17,8 +18,8 @@ void GameOverState::Init() {
     //Title
     m_gameTitle.setFont(m_context->m_assets->GetFont("Start_Menu_Font"));
     m_gameTitle.setString("Game Over");
-    m_gameTitle.setOrigin(m_gameTitle.getLocalBounds().width / 2, m_gameTitle.getLocalBounds().height / 2);
-    m_gameTitle.setPosition(m_context->m_window->getSize().x / 2, m_context->m_window->getSize().y / 2 - 100.f);
+    m_gameTitle.setOrigin(m_gameTitle.getLocalBounds().width / 2.f, m_gameTitle.getLocalBounds().height / 2.f);
+    m_gameTitle.setPosition(m_context->m_window->getSize().x / 2.f, m_context->m_window->getSize().y / 2 - 100.f);
 
     //Highscore
     m_HighScoreText.setFont(m_context->m_assets->GetFont("Start_Menu_Font"));
@@ -93,6 +94,6 @@ void GameOverState::Update(const sf::Time& deltaTime) {
     else if (m_isMainMenuButtonPressed)
     {
         m_context->m_states->PopAll();
-        m_context->m_states->Add(std::make_unique<StartMenuState>(m_context), true);
+        m_context->m_states->Add(std::make_unique<StartMenuState>(m_context, m_networkManager), true);
     }
 }

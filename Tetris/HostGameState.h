@@ -11,10 +11,10 @@ class HostGameState : public State {
 private:
 
     std::shared_ptr<Context> m_context;
-    NetworkManager* m_networkManager;
+    std::shared_ptr<NetworkManager> m_networkManager;
 
 public:
-    HostGameState(std::shared_ptr<Context>& context, NetworkManager* m_networkManager)
+    HostGameState(std::shared_ptr<Context>& context, std::shared_ptr<NetworkManager>& m_networkManager)
         : m_context(context),
         m_networkManager(m_networkManager)
     {}

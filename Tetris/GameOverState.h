@@ -11,6 +11,8 @@ class GameOverState : public State
 {
 	private:
 		std::shared_ptr <Context>m_context;
+		std::shared_ptr <NetworkManager> m_networkManager;
+
 		sf::Text m_gameTitle;
 		sf::Text m_gameOver;
 		sf::Text m_HighScoreText;
@@ -27,7 +29,7 @@ class GameOverState : public State
 
 
 	public:
-		GameOverState(std::shared_ptr <Context>& m_context, int lastHighScore);
+		GameOverState(std::shared_ptr <Context>& m_context, std::shared_ptr <NetworkManager>& m_networkManager, int lastHighScore);
 		~GameOverState();
 
 		void Init() override;
