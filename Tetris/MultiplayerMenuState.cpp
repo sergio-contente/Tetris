@@ -1,11 +1,12 @@
 #include "MultiplayerMenuState.h"
 
-MultiplayerMenuState::MultiplayerMenuState(std::shared_ptr <Context>& context) :
+MultiplayerMenuState::MultiplayerMenuState(std::shared_ptr <Context>& context, NetworkManager* m_networkManager) :
     m_context(context),
     m_isHostButtonSelected(true),
     m_isHostButtonPressed(false),
     m_isClientButtonSelected(false),
-    m_isClientButtonPressed(false)
+    m_isClientButtonPressed(false),
+    m_networkManager(m_networkManager)
 {}
 
 MultiplayerMenuState::~MultiplayerMenuState() {}
@@ -28,6 +29,13 @@ void MultiplayerMenuState::Init() {
     m_clientButton.setString("Connect");
     m_clientButton.setOrigin(m_clientButton.getLocalBounds().width / 2, m_clientButton.getLocalBounds().height / 2);
     m_clientButton.setPosition(m_context->m_window->getSize().x / 2, m_context->m_window->getSize().y / 2 + 50.f);
+
+    // Inicialização do botão Exit
+    m_exitButton.setFont(m_context->m_assets->GetFont("Start_Menu_Font"));
+    m_exitButton.setString("Back");
+    m_exitButton.setOrigin(m_exitButton.getLocalBounds().width / 2, m_exitButton.getLocalBounds().height / 2);
+    m_exitButton.setPosition(m_context->m_window->getSize().x / 2, m_context->m_window->getSize().y / 2 + 100.f); // Ajuste a posição conforme necessário
+
 }
 
 void MultiplayerMenuState::Draw() {
@@ -35,6 +43,7 @@ void MultiplayerMenuState::Draw() {
     m_context->m_window->draw(m_gameTitle);
     m_context->m_window->draw(m_hostButton);
     m_context->m_window->draw(m_clientButton);
+    m_context->m_window->draw(m_exitButton);
     m_context->m_window->display();
 }
 
@@ -47,22 +56,29 @@ void MultiplayerMenuState::ProcessInput() {
         else if (event.type == sf::Event::KeyPressed) {
             switch (event.key.code) {
             case sf::Keyboard::Up:
-                // Toggle between buttons
-                m_isHostButtonSelected = true;
-                m_isClientButtonSelected = false;
+                if (m_isClientButtonSelected) {
+                    m_isClientButtonSelected = false;
+                    m_isHostButtonSelected = true;
+                }
+                else if (m_isExitButtonSelected) {
+                    m_isExitButtonSelected = false;
+                    m_isClientButtonSelected = true;
+                }
                 break;
             case sf::Keyboard::Down:
-                // Toggle between buttons
-                m_isHostButtonSelected = false;
-                m_isClientButtonSelected = true;
-                break;
-            case sf::Keyboard::Return:
                 if (m_isHostButtonSelected) {
-                    m_isHostButtonPressed = true;
+                    m_isHostButtonSelected = false;
+                    m_isClientButtonSelected = true;
                 }
                 else if (m_isClientButtonSelected) {
-                    m_isClientButtonPressed = true;
+                    m_isClientButtonSelected = false;
+                    m_isExitButtonSelected = true;
                 }
+                break;
+            case sf::Keyboard::Return:
+                m_isHostButtonPressed = m_isHostButtonSelected;
+                m_isClientButtonPressed = m_isClientButtonSelected;
+                m_isExitButtonPressed = m_isExitButtonSelected;
                 break;
             default:
                 break;
@@ -76,22 +92,33 @@ void MultiplayerMenuState::Update(const sf::Time& deltaTime) {
     if (m_isHostButtonSelected) {
         m_hostButton.setFillColor(sf::Color::Yellow);
         m_clientButton.setFillColor(sf::Color::White);
+        m_exitButton.setFillColor(sf::Color::White);
     }
-    else {
+    else if (m_isClientButtonSelected) {
         m_hostButton.setFillColor(sf::Color::White);
         m_clientButton.setFillColor(sf::Color::Yellow);
+        m_exitButton.setFillColor(sf::Color::White);
+    }
+    else
+    {
+        m_hostButton.setFillColor(sf::Color::White);
+        m_clientButton.setFillColor(sf::Color::White);
+        m_exitButton.setFillColor(sf::Color::Yellow);
     }
 
     // Handle button press actions
     if (m_isHostButtonPressed) {
         // Example: Transition to a "host game" state
-        // m_context->m_states->Add(std::make_unique<HostGameState>(m_context), true);
+        m_context->m_states->Add(std::make_unique<HostGameState>(m_context, m_networkManager), true);
         m_isHostButtonPressed = false; // Reset the button pressed state
     }
     else if (m_isClientButtonPressed) {
         // Example: Transition to a "join game" state
-        // m_context->m_states->Add(std::make_unique<ClientGameState>(m_context), true);
+        m_context->m_states->Add(std::make_unique<ClientGameState>(m_context, m_networkManager), true);
         m_isClientButtonPressed = false; // Reset the button pressed state
+    }
+    else if (m_isExitButtonPressed) {
+        m_isExitButtonPressed = false;
     }
 }
 

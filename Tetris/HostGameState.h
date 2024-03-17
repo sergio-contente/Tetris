@@ -11,32 +11,23 @@ class HostGameState : public State {
 private:
 
     std::shared_ptr<Context> m_context;
-    std::unique_ptr<NetworkManager> m_networkManager;
+    NetworkManager* m_networkManager;
 
 public:
-    HostGameState(std::shared_ptr<Context>& context)
-        : m_context(context) {
-        m_networkManager = std::make_unique<NetworkManager>();
-    }
+    HostGameState(std::shared_ptr<Context>& context, NetworkManager* m_networkManager)
+        : m_context(context),
+        m_networkManager(m_networkManager)
+    {}
 
     ~HostGameState(){}
 
-    void Init() override {
-        m_networkManager->StartHost();
-    }
+    void Init() override;
 
-    void ProcessInput() override {
-        // Processa entradas específicas deste estado
-    }
+    void ProcessInput() override;
 
-    void Update(const sf::Time& deltaTime) override {
-        // Atualizações específicas deste estado
-        m_networkManager->ProcessNetworkEvents();
-    }
+    void Update(const sf::Time& deltaTime) override;
 
-    void Draw() override {
-        // Desenhar a interface do usuário específica deste estado, se houver
-    }
+    void Draw() override;
 };
 
 #endif // HOSTGAMESTATE_H

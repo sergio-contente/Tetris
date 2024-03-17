@@ -1,9 +1,17 @@
 #include "StartMenuState.h"
 #include "GamePlayState.h"
 
-StartMenuState::StartMenuState(std::shared_ptr <Context> &context) : m_context(context), m_isPlayButtonSelected(true),
-m_isPlayButtonPressed(false), m_isExitButtonPressed(false), m_isExitButtonSelected(false)
+StartMenuState::StartMenuState(std::shared_ptr <Context>& context, NetworkManager* networkManager) :
+	m_context(context),
+	m_isPlayButtonSelected(true),
+	m_isPlayButtonPressed(false),
+	m_isExitButtonPressed(false),
+	m_isExitButtonSelected(false),
+	m_isMultiplayerButtonSelected(false),
+	m_isMultiplayerButtonPressed(false),
+	m_networkManager(networkManager)
 {}
+
 StartMenuState::~StartMenuState()
 {}
 
@@ -124,7 +132,7 @@ void StartMenuState::Update(const sf::Time& deltaTime) {
 	else if (m_isMultiplayerButtonPressed)
 	{
 		// Here, you would transition to your multiplayer state or setup screen
-		m_context->m_states->Add(std::make_unique<MultiplayerMenuState>(m_context), true);
+		m_context->m_states->Add(std::make_unique<MultiplayerMenuState>(m_context, m_networkManager), true);
 		m_isMultiplayerButtonPressed = false; // Reset the button pressed state
 	}
 	else if (m_isExitButtonPressed)

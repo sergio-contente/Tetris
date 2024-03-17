@@ -135,6 +135,7 @@
   <ItemGroup>
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="Board.cpp" />
+    <ClCompile Include="ClientGameState.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameOverState.cpp" />
     <ClCompile Include="GamePlayState.cpp" />
@@ -151,6 +152,7 @@
   <ItemGroup>
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="Board.h" />
+    <ClInclude Include="ClientGameState.h" />
     <ClInclude Include="Context.hpp" />
     <ClInclude Include="Direction.h" />
     <ClInclude Include="Game.h" />

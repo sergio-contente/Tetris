@@ -10,10 +10,11 @@ public:
     NetworkManager();
     ~NetworkManager();
 
-    bool StartConnection(const std::string& address, uint16_t port);
+    bool StartClient(const std::string& address, uint16_t port);
     void ProcessNetworkEvents();
     void Disconnect();
     bool IsConnected();
+    bool StartHost(uint16_t port);
 
 private:
     ENetHost* client = nullptr;
