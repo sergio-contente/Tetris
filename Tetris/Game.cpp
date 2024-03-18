@@ -14,8 +14,7 @@ Game::Game() : m_context(std::make_shared<Context>())
 }
 
 Game::~Game()
-{
-}
+{}
 
 void Game::Run()
 {
@@ -37,6 +36,10 @@ void Game::Run()
                 m_context->m_states->GetCurrent()->ProcessInput();
                 m_context->m_states->GetCurrent()->Update(TIME_PER_FRAME);
                 m_context->m_states->GetCurrent()->Draw();
+
+                /*if (m_networkManager->IsConnected()) {
+                    m_networkManager->ProcessNetworkEvents();
+                }*/
             }
             else
             {

@@ -1,4 +1,8 @@
-#pragma once
+#ifndef GAMEPLAYSTATE_H
+#define GAMEPLAYSTATE_H
+
+//#define NOMINMAX
+//#include <windows.h>
 
 #include <SFML/Graphics.hpp>
 
@@ -9,6 +13,7 @@
 #include "Highscore.h"
 #include "Utils.h"
 #include "Direction.h"
+#include "GameOverState.h"
 
 class Board;
 
@@ -16,6 +21,7 @@ class GamePlayState : public State
 {
 private:
 	std::shared_ptr <Context> m_context;
+    std::shared_ptr <NetworkManager> m_networkManager;
     std::unique_ptr <Tetromino> m_tetromino;
     std::unique_ptr <Tetromino >m_preview;
     std::unique_ptr <Board> m_board;
@@ -23,8 +29,9 @@ private:
     int mID;
 public:
     Highscore m_HighScore;
+    int lastHighScore;
     sf::Texture   mTexture;
-	GamePlayState(std::shared_ptr <Context> &context);
+    GamePlayState(std::shared_ptr <Context>& context, std::shared_ptr <NetworkManager>& m_networkManager);
 	~GamePlayState();
 
     virtual void Init() override;
@@ -41,3 +48,5 @@ public:
     bool isValidMovement(std::array<sf::Vector2i, 4> block);
     bool isOccupied(int x, int y);
 };
+
+#endif

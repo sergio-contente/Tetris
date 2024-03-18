@@ -1,8 +1,8 @@
 #include "GamePlayState.h"
 
-GamePlayState::GamePlayState(std::shared_ptr <Context> &context) :
-m_context(context), m_tetromino(nullptr), m_preview(nullptr), 
-m_HighScore(), mElapsedTime(sf::Time::Zero), mID(getRandomNumber(7))
+GamePlayState::GamePlayState(std::shared_ptr <Context>& context, std::shared_ptr <NetworkManager>& m_networkManager) :
+    m_context(context), m_networkManager(m_networkManager), m_tetromino(nullptr), m_preview(nullptr),
+    m_HighScore(), mElapsedTime(sf::Time::Zero), mID(getRandomNumber(7))
 {
     m_context->m_assets->LoadTexture("Blocks", "assets/tetris-texture.png");
     mTexture = m_context->m_assets->GetTexture("Blocks");
@@ -21,8 +21,10 @@ void GamePlayState::Init() {
 void GamePlayState::createTetromino() {
     m_tetromino.reset(new Tetromino{ mTexture, mID });
     // create new game if necessary
-    if(m_board->isOccupied(m_tetromino->getBlockPositions())) {
+    if (m_board->isOccupied(m_tetromino->getBlockPositions())) {
         m_board->clean();
+        this->lastHighScore = m_HighScore.getScore();
+        m_context->m_states->Add(std::make_unique<GameOverState>(m_context, m_networkManager, this->lastHighScore), false);
         m_HighScore.reset();
     }
     mID = getRandomNumber(7);
@@ -87,6 +89,13 @@ bool GamePlayState::isOccupied(int x, int y) {
 
 
 void GamePlayState::Update(const sf::Time& deltaTime) {
+    sf::Clock clock;
+    sf::Time trigger{ sf::seconds(85.f / (85.f + (m_HighScore.getLevel() * (m_HighScore.getLevel() * 5.f)))) };
+    mElapsedTime += deltaTime;
+    if (mElapsedTime > trigger) {
+        mElapsedTime = sf::Time::Zero;
+        proceed(Direction::Down);
+    }
     m_board->update(deltaTime);
     m_HighScore.update(deltaTime);
     if (!m_tetromino) {
@@ -131,4 +140,3 @@ void GamePlayState::proceed(Direction dir) {
         }
     }
 }
-

@@ -1,4 +1,8 @@
-#pragma once
+#ifndef TETROMINO_H
+#define TETROMINO_H
+
+//#define NOMINMAX
+//#include <windows.h>
 
 #include <array>
 #include <SFML/Graphics.hpp>
@@ -28,3 +32,4 @@ private:
     std::array<sf::Vector2i, 4>     mOldBlock;
     mutable sf::Sprite              mSprite;
 };
+#endif

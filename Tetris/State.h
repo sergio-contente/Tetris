@@ -1,6 +1,9 @@
 #ifndef __STATE_H__
 #define __STATE_H__
 
+//#define NOMINMAX
+//#include <windows.h>
+
 #include "SFML/System/Time.hpp"
 
 class StateManager;

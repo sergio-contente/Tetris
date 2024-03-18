@@ -69,3 +69,6 @@ void Highscore::addClearedLines(int num) {
 int Highscore::getLevel() const {
     return mLinesCleared / 10;
 }
+int Highscore::getScore() {
+    return this->mScore;
+}

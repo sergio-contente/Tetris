@@ -1,7 +1,13 @@
-#pragma once
+#ifndef HIGHSCORE_H
+#define HIGHSCORE_H
+
+//#define NOMINMAX
+//#include <windows.h>
+
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Text.hpp>
+
 class Highscore {
 public:
     Highscore();
@@ -14,6 +20,7 @@ public:
     void addClearedLines(int num);
     void update(const sf::Time& dt);
     int getLevel() const;
+    int getScore();
 private:
     sf::Font            mFont;
     sf::Text            mLevelText;
@@ -25,5 +32,7 @@ private:
 
 
 };
+
+#endif
 
 
