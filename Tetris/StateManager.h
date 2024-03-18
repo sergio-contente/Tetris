@@ -16,7 +16,6 @@ public:
 	StateManager();
 	~StateManager();
 
-
     void Add(std::unique_ptr<State> toAdd, bool replace = false);
     void PopCurrent();
     void PopAll();

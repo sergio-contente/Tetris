@@ -14,9 +14,37 @@ StartMenuState::StartMenuState(std::shared_ptr <Context>& context, std::shared_p
 
 StartMenuState::~StartMenuState()
 {}
-
 void StartMenuState::Init() {
 	m_context->m_assets->LoadFont("Start_Menu_Font", "assets/Computerfont.ttf");
+
+	// Load the logo image
+	m_context->m_assets->LoadTexture("Logo", "assets/Logo.png");
+	// Load the background Texture
+	m_context->m_assets->LoadTexture("Background", "assets/Background.png");
+
+	// Get the texture and set it to be repeated
+	sf::Texture& backgroundTexture = m_context->m_assets->GetTexture("Background");
+	backgroundTexture.setRepeated(true);
+
+	// Create the background sprite
+	m_backgroundSprite.setTexture(backgroundTexture);
+	// Set the texture rect to cover the whole screen
+	m_backgroundSprite.setTextureRect(sf::IntRect(0, 0, m_context->m_window->getSize().x, m_context->m_window->getSize().y));
+
+
+
+	// Create the logo sprite
+	m_logoSprite.setTexture(m_context->m_assets->GetTexture("Logo"));
+	// Set the origin of the logo sprite to its center for proper positioning
+	m_logoSprite.setOrigin(m_logoSprite.getLocalBounds().width / 2, m_logoSprite.getLocalBounds().height / 2);
+	// Position the logo sprite at the center-top of the screen
+	m_logoSprite.setPosition(m_context->m_window->getSize().x / 2, m_context->m_window->getSize().y / 4);
+
+	// Scale the logo sprite based on screen resolution (example scaling factor)
+	float scaleX = m_context->m_window->getSize().x / 1920.f; // Assuming 1920 is the reference width
+	float scaleY = m_context->m_window->getSize().y / 1080.f; // Assuming 1080 is the reference height
+	m_logoSprite.setScale(scaleX, scaleY);
+
 
 	//Title
 	m_gameTitle.setFont(m_context->m_assets->GetFont("Start_Menu_Font"));
@@ -44,17 +72,31 @@ void StartMenuState::Init() {
 	m_exitButton.setOrigin(m_exitButton.getLocalBounds().width / 2, m_exitButton.getLocalBounds().height / 2);
 	m_exitButton.setPosition(m_context->m_window->getSize().x / 2, m_context->m_window->getSize().y / 2 + 50.f);
 	m_exitButton.setCharacterSize(20.f);
+
+
+	// For Play and Exit buttons, you can adjust character size or scale them similarly to the logo sprite
+	float buttonScale = std::min(scaleX, scaleY); // You might want to scale buttons less aggressively
+	m_playButton.setCharacterSize(static_cast<unsigned int>(20.f * buttonScale));
+	m_exitButton.setCharacterSize(static_cast<unsigned int>(20.f * buttonScale));
+
 }
 
 
 void StartMenuState::Draw() {
 	m_context->m_window->clear(sf::Color::Blue);
-	m_context->m_window->draw(m_gameTitle);
+	// Draw the background sprite first
+	m_context->m_window->draw(m_backgroundSprite);
+
+	// Draw the logo sprite before the buttons
+	m_context->m_window->draw(m_logoSprite);
+
+	// Draw buttons as before
 	m_context->m_window->draw(m_playButton);
 	m_context->m_window->draw(m_exitButton);
 	m_context->m_window->draw(m_multiplayerButton);
 	m_context->m_window->display();
 }
+
 
 void StartMenuState::ProcessInput() {
 	sf::Event event;

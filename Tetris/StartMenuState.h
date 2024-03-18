@@ -18,6 +18,10 @@ private:
 	sf::Text m_gameTitle;
 	sf::Text m_playButton;
 	sf::Text m_exitButton;
+	sf::Texture m_backgroundTexture;
+	sf::Sprite m_backgroundSprite;
+	sf::Sprite m_logoSprite;
+
 	sf::Text m_multiplayerButton;
 
 	bool m_isPlayButtonSelected;
