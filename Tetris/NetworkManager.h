@@ -37,15 +37,15 @@ public:
     void notifyGameReady();
 
     std::map<ENetPeer*, int> getClientIDs();
+    ENetPeer* peer = nullptr;
+    ENetHost* client = nullptr;
 
 private:
-    ENetHost* client = nullptr;
-    ENetPeer* peer = nullptr;
 
     std::map<ENetPeer*, int> clientIDs;
     int nextClientID = 1;  // Starting from 1 for client IDs
-    bool readyToStartGame = false;
     bool isHost = false;
+    bool readyToStartGame = false;
 
     std::shared_ptr <Context>& m_context;
 };

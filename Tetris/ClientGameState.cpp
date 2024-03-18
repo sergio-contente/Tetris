@@ -33,8 +33,11 @@ void ClientGameState::ProcessInput() {
 void ClientGameState::Update(const sf::Time& deltaTime) {
     // Processa eventos de rede e atualiza o estado do jogo
     // Adicione aqui qualquer lógica de atualização específica do cliente
-    if (m_networkManager->IsConnected() && !currentyInGameplayState) {
-        clientIDs = m_networkManager->getClientIDs();
+    std::cout << "peer_client" << m_networkManager->peer << std::endl;
+    std::cout << "client_client" << m_networkManager->client << std::endl;
+    currentyInGameplayState = m_networkManager->isReadyToStartGame();
+    if (m_networkManager->IsConnected() && currentyInGameplayState) {
+        m_context->m_states->Add(std::make_unique<GamePlayState>(m_context, m_networkManager), false);
     }
      m_networkManager->ProcessNetworkEvents();
 }

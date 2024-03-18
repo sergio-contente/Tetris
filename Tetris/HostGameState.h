@@ -19,6 +19,9 @@ private:
     sf::Text m_playButton;
     sf::Text m_client;
 
+    bool m_isPlayButtonSelected;
+    bool m_isPlayButtonPressed;
+
     std::shared_ptr<Context> m_context;
     std::shared_ptr<NetworkManager> m_networkManager;
 
@@ -28,7 +31,9 @@ private:
 public:
     HostGameState(std::shared_ptr<Context>& context, std::shared_ptr<NetworkManager>& m_networkManager)
         : m_context(context),
-        m_networkManager(m_networkManager)
+        m_networkManager(m_networkManager),
+        m_isPlayButtonSelected(true),
+        m_isPlayButtonPressed(false)
     {}
 
     ~HostGameState(){}

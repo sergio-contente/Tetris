@@ -128,6 +128,7 @@ void NetworkManager::ProcessNetworkEvents() {
                 // Clean up the packet now that we're done using it.
                 MessageType* messageType = reinterpret_cast<MessageType*>(event.packet->data);
                 if (*messageType == MessageType::GAME_READY) {
+                    std::cout << "RECEBI JOGO PRONTO" << std::endl;
                     // Definir a flag para iniciar o jogo.
                     readyToStartGame = true;
                 }
@@ -149,24 +150,29 @@ void NetworkManager::ProcessNetworkEvents() {
     }
 }
 
+// Isto deve ser chamado para notificar todos os clientes que o jogo está pronto.
 void NetworkManager::notifyGameReady() {
     if (isHost) {
-        // A mensagem real pode ser apenas o tipo se não precisarmos de dados adicionais.
         MessageType messageType = MessageType::GAME_READY;
 
-        // Notificar todos os clientes conectados.
-        for (ENetPeer* peer = client->peers; peer < &client->peers[client->peerCount]; ++peer) {
-            // Verifique se o peer está conectado antes de enviar.
+        // Iterar sobre o mapa de IDs de cliente e enviar a mensagem para cada peer conectado.
+        for (const auto& clientPair : clientIDs) {
+            ENetPeer* peer = clientPair.first;
+            int clientID = clientPair.second;
+
+            // Verificar se o peer está conectado antes de enviar.
             if (peer->state == ENET_PEER_STATE_CONNECTED) {
-                NetworkManager::sendPacket(peer, messageType, &messageType, sizeof(messageType));
+                std::cout << "Enviando mensagem de jogo pronto para o cliente com ID: " << clientID << std::endl;
+                sendPacket(peer, messageType, &messageType, sizeof(messageType));
             }
         }
     }
-    else {
-        // Esta função não seria chamada pelo cliente no uso normal, pois o cliente
-        // recebe a notificação do servidor. Você trataria isso no ProcessNetworkEvents.
-    }
 }
+
+    //else {
+    //    // Esta função não seria chamada pelo cliente no uso normal, pois o cliente
+    //    // recebe a notificação do servidor. Você trataria isso no ProcessNetworkEvents.
+    //}
 
 
 void NetworkManager::Disconnect() {
