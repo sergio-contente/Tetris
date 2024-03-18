@@ -1,7 +1,13 @@
-#pragma once
+#ifndef HIGHSCORE_H
+#define HIGHSCORE_H
+
+//#define NOMINMAX
+//#include <windows.h>
+
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Text.hpp>
+
 class Highscore {
 public:
     Highscore();
@@ -26,5 +32,7 @@ private:
 
 
 };
+
+#endif
 
 

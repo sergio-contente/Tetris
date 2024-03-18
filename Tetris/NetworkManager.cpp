@@ -1,6 +1,8 @@
 #include "NetworkManager.h"
+#include "GamePlayState.h"
 
-NetworkManager::NetworkManager() {
+
+NetworkManager::NetworkManager(std::shared_ptr <Context>& context) : m_context(context) {
     if (enet_initialize() != 0) {
         std::cerr << "An error occurred while initializing ENet.\n";
     }
@@ -13,7 +15,31 @@ NetworkManager::~NetworkManager() {
     enet_deinitialize();
 }
 
+void NetworkManager::sendPacket(ENetPeer* peer, MessageType type, const void* data, size_t dataLength) {
+    //if (client == nullptr) {
+    //    // Tratamento de erro: client não inicializado
+    //    return;
+    //}
+    std::cout << "Hora de enviar um pacotinho hehehe" << std::endl;
+    ENetPacket* packet = enet_packet_create(data, dataLength, ENET_PACKET_FLAG_RELIABLE);
+    enet_peer_send(peer, 0, packet);
+    enet_host_flush(client); // Imediatamente tenta enviar o pacote.
+}
+
+void NetworkManager::assignClientID(ENetPeer* peer) {
+    std::cout << "CRIANDO ID DO CLIENT" << std::endl;
+    sendPacket(peer, MessageType::ASSIGN_ID, &clientIDs[peer], sizeof(int));
+    clientIDs[peer] = nextClientID++;
+}
+
+void NetworkManager::removeClientID(ENetPeer* peer) {
+    std::cout << "DESTRUINDO ID DO CLIENT" << std::endl;
+    clientIDs.erase(peer);
+}
+
+
 bool NetworkManager::StartClient(const std::string& address, uint16_t port) {
+    isHost = false;
     if (client != nullptr) {
         std::cerr << "A network host/client is already created.\n";
         return false;
@@ -43,6 +69,7 @@ bool NetworkManager::StartClient(const std::string& address, uint16_t port) {
     ENetEvent event;
     if (enet_host_service(client, &event, 5000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
         std::cout << "Connection to " << address << ":" << port << " succeeded.\n";
+        peer = event.peer;
         return true;
     }
     else {
@@ -74,12 +101,13 @@ bool NetworkManager::StartHost(uint16_t port) {
     }
 
     std::cout << "Hosting a game on port " << port << std::endl;
+    isHost = true;
     return true;
 }
 
 void NetworkManager::ProcessNetworkEvents() {
     ENetEvent event;
-    while (enet_host_service(client, &event, 0) > 0) {
+    if (enet_host_service(client, &event, 0) > 0) {
         std::cout << "Processing network events...\n";
         if (client == nullptr) {
             std::cerr << "Client pointer is null.\n";
@@ -87,6 +115,10 @@ void NetworkManager::ProcessNetworkEvents() {
         }
         // Agora é seguro processar eventos de rede
         switch (event.type) {
+        case ENET_EVENT_TYPE_CONNECT:
+            std::cout << "A client connected from " << event.peer->address.host << ":" << event.peer->address.port << ".\n";
+            assignClientID(event.peer);
+            break;
         case ENET_EVENT_TYPE_RECEIVE:
             if (event.peer != nullptr && event.peer->data != nullptr) {
                 std::cout << "A packet of length " << event.packet->dataLength
@@ -94,6 +126,11 @@ void NetworkManager::ProcessNetworkEvents() {
                     << " was received from " << event.peer->data
                     << " on channel " << event.channelID << ".\n";
                 // Clean up the packet now that we're done using it.
+                MessageType* messageType = reinterpret_cast<MessageType*>(event.packet->data);
+                if (*messageType == MessageType::GAME_READY) {
+                    // Definir a flag para iniciar o jogo.
+                    readyToStartGame = true;
+                }
                 enet_packet_destroy(event.packet);
             }
             break;
@@ -101,12 +138,33 @@ void NetworkManager::ProcessNetworkEvents() {
         case ENET_EVENT_TYPE_DISCONNECT:
             if (event.peer != nullptr) {
                 std::cout << "Disconnection occurred.\n";
+                removeClientID(event.peer);
                 event.peer->data = nullptr;
             }
             break;
 
-            // Handle other events...
+        default:
+            break;
         }
+    }
+}
+
+void NetworkManager::notifyGameReady() {
+    if (isHost) {
+        // A mensagem real pode ser apenas o tipo se não precisarmos de dados adicionais.
+        MessageType messageType = MessageType::GAME_READY;
+
+        // Notificar todos os clientes conectados.
+        for (ENetPeer* peer = client->peers; peer < &client->peers[client->peerCount]; ++peer) {
+            // Verifique se o peer está conectado antes de enviar.
+            if (peer->state == ENET_PEER_STATE_CONNECTED) {
+                NetworkManager::sendPacket(peer, messageType, &messageType, sizeof(messageType));
+            }
+        }
+    }
+    else {
+        // Esta função não seria chamada pelo cliente no uso normal, pois o cliente
+        // recebe a notificação do servidor. Você trataria isso no ProcessNetworkEvents.
     }
 }
 
@@ -133,6 +191,20 @@ void NetworkManager::Disconnect() {
 }
 
 bool NetworkManager::IsConnected() {
-    return (client != nullptr && peer != nullptr);
+    //std::cout << "client" << client << "           " << "peer" << peer << std::endl;
+    if (isHost) {
+        return true;
+    }
+    if (client == nullptr || peer == nullptr) {
+        return false;
+    }
+    return true;
 }
 
+bool NetworkManager::isReadyToStartGame() {
+    return readyToStartGame;
+}
+
+std::map<ENetPeer*, int> NetworkManager::getClientIDs() {
+    return clientIDs;
+}

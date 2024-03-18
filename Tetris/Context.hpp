@@ -1,6 +1,9 @@
 #ifndef CONTEXT_HPP
 #define CONTEXT_HPP
 
+//#define NOMINMAX
+//#include <windows.h>
+
 #include <memory>
 #include "SFML/Graphics.hpp"
 #include "StateManager.h"

@@ -1,4 +1,8 @@
-#pragma once
+#ifndef STARTMENUSTATE_H
+#define STARTMENUSTATE_H
+
+//#define NOMINMAX
+//#include <windows.h>
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -37,5 +41,6 @@ public:
 	void Update(const sf::Time& deltaTime) override;
 	void Draw() override;
 };
+#endif
 
 

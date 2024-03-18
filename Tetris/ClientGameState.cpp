@@ -1,4 +1,5 @@
 #include "ClientGameState.h"
+#include <enet/enet.h>
 #include <iostream>
 
 ClientGameState::ClientGameState(std::shared_ptr<Context>& context, std::shared_ptr<NetworkManager>& networkManager)
@@ -20,19 +21,22 @@ void ClientGameState::Init() {
 }
 
 void ClientGameState::ProcessInput() {
-    sf::Event event;
-    while (m_context->m_window->pollEvent(event)) {
-        if (event.type == sf::Event::Closed) {
-            m_context->m_window->close();
-        }
-        // Adicione mais lógica de entrada conforme necessário
-    }
+    //sf::Event event;
+    //while (m_context->m_window->pollEvent(event)) {
+    //    if (event.type == sf::Event::Closed) {
+    //        m_context->m_window->close();
+    //    }
+    //    // Adicione mais lógica de entrada conforme necessário
+    //}
 }
 
 void ClientGameState::Update(const sf::Time& deltaTime) {
     // Processa eventos de rede e atualiza o estado do jogo
-    m_networkManager->ProcessNetworkEvents();
     // Adicione aqui qualquer lógica de atualização específica do cliente
+    if (m_networkManager->IsConnected() && !currentyInGameplayState) {
+        clientIDs = m_networkManager->getClientIDs();
+    }
+     m_networkManager->ProcessNetworkEvents();
 }
 
 void ClientGameState::Draw() {

@@ -1,4 +1,8 @@
-#pragma once
+#ifndef GAMEPLAYSTATE_H
+#define GAMEPLAYSTATE_H
+
+//#define NOMINMAX
+//#include <windows.h>
 
 #include <SFML/Graphics.hpp>
 
@@ -44,3 +48,5 @@ public:
     bool isValidMovement(std::array<sf::Vector2i, 4> block);
     bool isOccupied(int x, int y);
 };
+
+#endif

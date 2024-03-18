@@ -1,7 +1,8 @@
-
 #ifndef BOARD_H
 #define BOARD_H
 
+//#define NOMINMAX
+//#include <windows.h>
 
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>

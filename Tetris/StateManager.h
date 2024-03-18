@@ -1,6 +1,9 @@
 #ifndef __STATEMANAGER_H__
 #define __STATEMANAGER_H__
 
+//#define NOMINMAX
+//#include <windows.h>
+
 #include <iostream>
 #include <stack>
 #include <memory>

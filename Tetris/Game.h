@@ -1,6 +1,9 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+//#define NOMINMAX
+//#include <windows.h>
+
 #include <memory>
 #include "Context.hpp"
 #include "NetworkManager.h"

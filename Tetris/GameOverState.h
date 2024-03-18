@@ -1,4 +1,10 @@
-#pragma once
+#ifndef GAMEOVERSTATE_H
+#define GAMEOVERSTATE_H
+
+//
+
+//#include <windows.h>
+
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
@@ -38,3 +44,4 @@ class GameOverState : public State
 		void Draw() override;
 };
 
+#endif

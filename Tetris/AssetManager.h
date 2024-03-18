@@ -1,6 +1,9 @@
 #ifndef ASSETMANAGER_H
 #define ASSETMANAGER_H
 
+//#define NOMINMAX
+////#include <windows.h>
+
 #include <map>
 #include <string>
 

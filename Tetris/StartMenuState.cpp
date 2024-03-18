@@ -126,7 +126,7 @@ void StartMenuState::Update(const sf::Time& deltaTime) {
 	// Handle button press actions
 	if (m_isPlayButtonPressed)
 	{
-		m_context->m_states->Add(std::make_unique<GamePlayState>(m_context, m_networkManager), true);
+		m_context->m_states->Add(std::make_unique<GamePlayState>(m_context, m_networkManager), false);
 		m_isPlayButtonPressed = false; // Reset the button pressed state
 	}
 	else if (m_isMultiplayerButtonPressed)

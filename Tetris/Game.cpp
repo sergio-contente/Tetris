@@ -2,7 +2,7 @@
 #include "StartMenuState.h"
 
 
-Game::Game() : m_context(std::make_shared<Context>()), m_networkManager(std::make_shared<NetworkManager>()) {
+Game::Game() : m_context(std::make_shared<Context>()), m_networkManager(std::make_shared<NetworkManager>(m_context)) {
     m_context->m_window->create(sf::VideoMode(640, 352), "Tetris", sf::Style::Close);
     m_context->m_states->Add(std::make_unique<StartMenuState>(m_context, m_networkManager), false);
 }
@@ -31,9 +31,9 @@ void Game::Run()
                 m_context->m_states->GetCurrent()->Update(TIME_PER_FRAME);
                 m_context->m_states->GetCurrent()->Draw();
 
-                if (m_networkManager->IsConnected()) {
+                /*if (m_networkManager->IsConnected()) {
                     m_networkManager->ProcessNetworkEvents();
-                }
+                }*/
             }
             else
             {
