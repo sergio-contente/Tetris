@@ -11,7 +11,7 @@
 #include "Game.h"
 #include "GamePlayState.h"
 #include "StartMenuState.h"
-#include "HostGameState.h"
+#include "ServerGameState.h"
 #include "ClientGameState.h"
 
 class MultiplayerMenuState : public State

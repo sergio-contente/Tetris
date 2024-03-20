@@ -31,10 +31,6 @@ void ClientGameState::ProcessInput() {
 }
 
 void ClientGameState::Update(const sf::Time& deltaTime) {
-    // Processa eventos de rede e atualiza o estado do jogo
-    // Adicione aqui qualquer lógica de atualização específica do cliente
-    std::cout << "peer_client" << m_networkManager->peer << std::endl;
-    std::cout << "client_client" << m_networkManager->client << std::endl;
     currentyInGameplayState = m_networkManager->isReadyToStartGame();
     if (m_networkManager->IsConnected() && currentyInGameplayState) {
         m_context->m_states->Add(std::make_unique<GamePlayState>(m_context, m_networkManager), false);
@@ -44,8 +40,5 @@ void ClientGameState::Update(const sf::Time& deltaTime) {
 
 void ClientGameState::Draw() {
     m_context->m_window->clear(sf::Color::Blue); // Exemplo: Limpa a tela com azul
-
-    // Adicione aqui o desenho da interface do usuário específica do cliente
-
     m_context->m_window->display(); // Mostra o que foi desenhado
 }

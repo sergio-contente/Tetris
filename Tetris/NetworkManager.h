@@ -15,10 +15,12 @@
 #include "Context.hpp"
 
 enum class MessageType {
-    GAME_READY,
-    ASSIGN_ID
+    GAME_READY
 };
 
+struct ClientData {
+    MessageType start_flag = MessageType::GAME_READY;
+};
 
 class NetworkManager : public std::enable_shared_from_this<NetworkManager> {
 public:
@@ -31,19 +33,15 @@ public:
     bool IsConnected();
     bool isReadyToStartGame();
     bool StartHost(uint16_t port);
-    void assignClientID(ENetPeer* peer);
-    void removeClientID(ENetPeer* peer);
     void sendPacket(ENetPeer* peer, MessageType type, const void* data, size_t dataLength);
     void notifyGameReady();
 
-    std::map<ENetPeer*, int> getClientIDs();
+    ENetPeer* getClients() const;
     ENetPeer* peer = nullptr;
     ENetHost* client = nullptr;
 
 private:
 
-    std::map<ENetPeer*, int> clientIDs;
-    int nextClientID = 1;  // Starting from 1 for client IDs
     bool isHost = false;
     bool readyToStartGame = false;
 

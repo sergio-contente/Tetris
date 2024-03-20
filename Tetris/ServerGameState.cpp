@@ -1,19 +1,19 @@
-#include "HostGameState.h"
+#include "ServerGameState.h"
 #include <enet/enet.h>
 #include <iostream>
 
-void HostGameState::Init() {
+void ServerGameState::Init() {
     if (m_networkManager && m_networkManager->IsConnected()) {
         // Faz algo se já estiver conectado
         std::cout << "Already connected!" << std::endl;
     }
     else {
-        // Tenta iniciar o host se ainda não estiver conectado
+        // Tenta iniciar o Server se ainda não estiver conectado
         m_networkManager->StartHost(1234);
     }
 }
 
-void HostGameState::ProcessInput() {
+void ServerGameState::ProcessInput() {
 	sf::Event event;
 	while (m_context->m_window->pollEvent(event))
 	{
@@ -34,20 +34,11 @@ void HostGameState::ProcessInput() {
 	}
 }
 
-void HostGameState::Update(const sf::Time& deltaTime) {
-
-    // Atualizações específicas deste estado vão aqui
-    // Por exemplo, você pode querer processar eventos de rede
-    /*std::cout << "getclients" << m_networkManager->getClientIDs().size() << std::endl;
-    std::cout << "ingameplaystate" << currentyInGameplayState << std::endl;
-    std::cout << "isconnected" << m_networkManager->IsConnected() << std::endl;*/
-    std::cout <<"peer_host" << m_networkManager->peer << std::endl;
-    std::cout <<"client_host" <<  m_networkManager->client << std::endl;
+void ServerGameState::Update(const sf::Time& deltaTime) {
     currentyInGameplayState = m_networkManager->isReadyToStartGame();
-    if (m_networkManager->IsConnected()  && m_networkManager->getClientIDs().size() != NULL) {
+    if (m_networkManager->IsConnected()  && m_networkManager->getClients() != NULL) {
         if (!currentyInGameplayState)
         {
-            std::map<ENetPeer*, int> clientIDs = m_networkManager->getClientIDs();
             MenuIdle();
         }
         else {
@@ -56,15 +47,14 @@ void HostGameState::Update(const sf::Time& deltaTime) {
 
     }
     m_networkManager->ProcessNetworkEvents();
-    // Aqui pode ser um bom lugar para verificar conexões de clientes e talvez mudar o estado do jogo
 }
 
-void HostGameState::Draw() {
+void ServerGameState::Draw() {
     // Desenha a interface do usuário específica deste estado aqui
     m_context->m_window->clear(sf::Color::Blue); // Exemplo: Limpa a tela com preto
 
-    // Aqui você pode desenhar elementos específicos do host, como informações de conexão
-    if (m_networkManager->IsConnected()  && m_networkManager->getClientIDs().size() != NULL) {
+    // Aqui você pode desenhar elementos específicos do Server, como informações de conexão
+    if (m_networkManager->IsConnected()  && m_networkManager->getClients() != NULL) {
         if (currentyInGameplayState) {
             m_playButton.setString("Waiting for other player...");
         }
@@ -74,7 +64,7 @@ void HostGameState::Draw() {
     m_context->m_window->display(); // Mostra o que foi desenhado
 }
 
-void HostGameState::MenuIdle() {
+void ServerGameState::MenuIdle() {
     m_context->m_assets->LoadFont("Start_Menu_Font", "assets/Computerfont.ttf");
 
     //Title

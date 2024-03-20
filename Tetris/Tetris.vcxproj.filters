@@ -54,7 +54,7 @@
     <ClCompile Include="MultiplayerMenuState.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
-    <ClCompile Include="HostGameState.cpp">
+    <ClCompile Include="ServerGameState.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
     <ClCompile Include="ClientGameState.cpp">
@@ -113,7 +113,7 @@
     <ClInclude Include="MultiplayerMenuState.h">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
-    <ClInclude Include="HostGameState.h">
+    <ClInclude Include="ServerGameState.h">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
     <ClInclude Include="ClientGameState.h">
