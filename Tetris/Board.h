@@ -52,7 +52,7 @@ public:
     inline bool isToRemoveBlocks() const { return mToRemoveBlocks; }
     Field* getField(int x, int y);
     int getBlocksFromEnemy();
-    void addAttackRows(int countBlocks);
+    void addAttackRows(int linesToAdd);
 
 private:
     int convert2D_to_1D(int x, int y);

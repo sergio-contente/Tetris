@@ -42,6 +42,7 @@ public:
     bool isReadyToStartGame();
     bool getAttackStatus();
     int getLinesAdded();
+    void resetLinesAdded();
 
     ENetPeer* getClients() const;
     ENetPeer* peer = nullptr;

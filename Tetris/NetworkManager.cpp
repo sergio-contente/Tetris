@@ -124,18 +124,9 @@ void NetworkManager::ProcessNetworkEvents() {
                     readyToStartGame = true;
                 }
                 if (messageType == MessageType::MSG_ATTACK) {
-                    std::cout << "ESTOU RECEBENDO ATTACK NETWORK\nAttackStatus" <<  attackStatus << std::endl;
-                    if (attackStatus == true)
-                    {
-                        attackStatus = false;
-                        linesAdded = 0;
-                    }
-                    else {
-                        std::cout << "ESTOU RECEBENDO ATTACK NETWORK\nAttackStatus" << attackStatus << std::endl;
-                        attackStatus = true;
-                        linesAdded = clientData->blocksToSend;
-                    }
-
+                    std::cout << "RECEBI UMA MENSAGEM DE ATAQUE" << std::endl;
+                    std::cout << "VOU ADICIONAR " << clientData->blocksToSend << " linhas" << std::endl;
+                    linesAdded = clientData->blocksToSend;
                 }
                 enet_packet_destroy(event.packet);
             }
@@ -250,6 +241,11 @@ bool NetworkManager::getAttackStatus() {
 
 int NetworkManager::getLinesAdded() {
     return linesAdded;
+}
+
+void NetworkManager::resetLinesAdded() {
+    std::cout << "RESETEI LINHAS" << std::endl;
+    linesAdded = 0;
 }
 
 ENetPeer* NetworkManager::getClients() const {

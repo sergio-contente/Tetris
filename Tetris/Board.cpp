@@ -101,10 +101,8 @@ void Board::markLinesForRemoval() {
         counter = 0;
     }
     mGame.m_HighScore.addClearedLines(countClearedLines);
-    //std::cout << "LINHAS LIMPAS: " << countClearedLines << std::endl;
     countBlocks = countClearedLines;
     if (countBlocks != 0) {
-        std::cout << "ESTOU DENTRO DO DEBUGGER" << std::endl;
         m_networkManager->notifyAttack(countBlocks);
     }
     std::sort(mYCleaned.begin(), mYCleaned.end(), [](int left, int right) { return left < right; });
@@ -127,8 +125,11 @@ void Board::cleanLines() {
 }
 
 void Board::update(const sf::Time& dt) {
-    if (m_networkManager->getAttackStatus()) {
+    if (m_networkManager->getLinesAdded() > 0) {
+        std::cout << "LINHAS ADICIONADAS " << m_networkManager->getLinesAdded() << std::endl;
         addAttackRows(m_networkManager->getLinesAdded());
+        m_networkManager->resetLinesAdded();
+        std::cout << "LINHAS RESETADAS: " << m_networkManager->getLinesAdded() << std::endl;
     }
     markLinesForRemoval();
     if (mToRemoveBlocks) {
@@ -137,6 +138,7 @@ void Board::update(const sf::Time& dt) {
         if (mElapsedTime > 0.6f) {
             mElapsedTime = 0.f;
             cleanLines();
+            
         }
     }
 }
@@ -165,29 +167,32 @@ int Board::getBlocksFromEnemy() {
     return countBlocks;
 }
 
-void Board::addAttackRows(int countBlocks) {
-    if (countBlocks <= 0) return;
-
+void Board::addAttackRows(int linestoAdd) {
+    if (linestoAdd <= 0) return;
+    std::cout << "COUNT BLOCKS: " << linestoAdd << std::endl;
     // Move todas as linhas existentes para cima.
-    for (int y = 0; y < mSize.y - countBlocks; ++y) {
+    for (int y = 0; y < mSize.y - linestoAdd; ++y) {
         for (int x = 0; x < mSize.x; ++x) {
-            *getField(x, y) = *getField(x, y + countBlocks);
+            *getField(x, y) = *getField(x, y + linestoAdd);
         }
     }
 
     // Adiciona as novas linhas de ataque na parte inferior.
-    for (int i = 0; i < countBlocks; ++i) {
-        int newY = mSize.y - 1 - i;  // Índice da nova linha na parte inferior do tabuleiro.
+    for (int i = 0; i < linestoAdd; ++i) {
+        int newY = mSize.y - 1 - i; // Índice da nova linha na parte inferior do tabuleiro.
+        int gapPosition = rand() % mSize.x; // Escolhe uma posição aleatória para a lacuna.
+
         for (int x = 0; x < mSize.x; ++x) {
+            if (x == gapPosition) continue; // Pula a posição aleatória, deixando uma lacuna.
+
             // Id do bloco que queremos adicionar. Assumindo que você tenha blocos de ID 0 a 6.
             int blockId = 0;
-
             std::array<sf::Vector2i, 4> blockPositions = {
                 sf::Vector2i(x, newY), sf::Vector2i(x, newY), sf::Vector2i(x, newY), sf::Vector2i(x, newY)
             };
             // Adiciona um bloco na posição (x, newY).
+            std::cout << "TO ADICIONANDO BLOCO NA POSICAO: (" << x << ", " << newY << ")" << std::endl;
             addBlock(blockId, blockPositions);
         }
     }
-    m_networkManager->notifyAttack(0);
 }
