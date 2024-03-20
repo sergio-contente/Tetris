@@ -13,8 +13,8 @@ Field& Field::operator=(const Field& field) {
     return *this;
 }
 
-Board::Board(sf::Vector2i size, GamePlayState& game)
-    : mGame(game), mFields(), mFieldInfos(), mSize(size), mYCleaned(), mElapsedTime(0.f), mToRemoveBlocks(false) {
+Board::Board(sf::Vector2i size, GamePlayState& game, std::shared_ptr <NetworkManager>& m_networkManager)
+    : mGame(game), mFields(), mFieldInfos(), mSize(size), mYCleaned(), mElapsedTime(0.f), mToRemoveBlocks(false), m_networkManager(m_networkManager) {
     for (int x = 0; x < size.x; ++x) {
         for (int y = 0; y < size.y; ++y) {
             mFields[convert2D_to_1D(x, y)] = std::make_unique<Field>();
@@ -41,7 +41,6 @@ void Board::draw(sf::RenderWindow& window) {
         for (int y = 0; y < mSize.y; ++y) {
 
             auto field = getField(x, y);
-            //if field has not been occupied yet, mInfo would be assigned to nullptr
             if (field->mOccupied && field->mVisible) {
                 field->mInfo->mSprite.setPosition(x * 18.f, y * 18.f);
                 window.draw(field->mInfo->mSprite);
@@ -93,7 +92,7 @@ void Board::markLinesForRemoval() {
             if (field->mOccupied) {
                 counter++;
             }
-            if (counter == 10) { // Line full
+            if (counter == 10) { 
                 mYCleaned.push_back(y);
                 mToRemoveBlocks = true;
                 countClearedLines++;
@@ -102,6 +101,12 @@ void Board::markLinesForRemoval() {
         counter = 0;
     }
     mGame.m_HighScore.addClearedLines(countClearedLines);
+    //std::cout << "LINHAS LIMPAS: " << countClearedLines << std::endl;
+    countBlocks = countClearedLines;
+    if (countBlocks != 0) {
+        std::cout << "ESTOU DENTRO DO DEBUGGER" << std::endl;
+        m_networkManager->notifyAttack(countBlocks);
+    }
     std::sort(mYCleaned.begin(), mYCleaned.end(), [](int left, int right) { return left < right; });
 }
 
@@ -122,6 +127,9 @@ void Board::cleanLines() {
 }
 
 void Board::update(const sf::Time& dt) {
+    if (m_networkManager->getAttackStatus()) {
+        addAttackRows(m_networkManager->getLinesAdded());
+    }
     markLinesForRemoval();
     if (mToRemoveBlocks) {
         mElapsedTime += dt.asSeconds();
@@ -151,4 +159,35 @@ bool Board::isOccupied(std::array<sf::Vector2i, 4> block) {
         }
     }
     return false;
+}
+
+int Board::getBlocksFromEnemy() {
+    return countBlocks;
+}
+
+void Board::addAttackRows(int countBlocks) {
+    if (countBlocks <= 0) return;
+
+    // Move todas as linhas existentes para cima.
+    for (int y = 0; y < mSize.y - countBlocks; ++y) {
+        for (int x = 0; x < mSize.x; ++x) {
+            *getField(x, y) = *getField(x, y + countBlocks);
+        }
+    }
+
+    // Adiciona as novas linhas de ataque na parte inferior.
+    for (int i = 0; i < countBlocks; ++i) {
+        int newY = mSize.y - 1 - i;  // Índice da nova linha na parte inferior do tabuleiro.
+        for (int x = 0; x < mSize.x; ++x) {
+            // Id do bloco que queremos adicionar. Assumindo que você tenha blocos de ID 0 a 6.
+            int blockId = 0;
+
+            std::array<sf::Vector2i, 4> blockPositions = {
+                sf::Vector2i(x, newY), sf::Vector2i(x, newY), sf::Vector2i(x, newY), sf::Vector2i(x, newY)
+            };
+            // Adiciona um bloco na posição (x, newY).
+            addBlock(blockId, blockPositions);
+        }
+    }
+    m_networkManager->notifyAttack(0);
 }

@@ -15,13 +15,8 @@ NetworkManager::~NetworkManager() {
     enet_deinitialize();
 }
 
-void NetworkManager::sendPacket(ENetPeer* peer, MessageType type, const void* data, size_t dataLength) {
-    ENetPacket* packet = enet_packet_create(data, dataLength, ENET_PACKET_FLAG_RELIABLE);
-    std::cout << "PACOTE:" << packet << std::endl;
-    std::cout << "A packet of length " << packet->dataLength << std::endl;
-    std::cout << "PACOTE DATA: " << static_cast<int>(*reinterpret_cast<MessageType*>(packet->data)) << std::endl;
-    MessageType* receivedType = reinterpret_cast<MessageType*>(packet->data);
-    std::cout << "A packet of length " << packet->dataLength << " containing " << static_cast<int>(*receivedType) << std::endl;
+void NetworkManager::sendPacket(ENetPeer* peer, const ClientData& messageData) {
+    ENetPacket* packet = enet_packet_create(&messageData, sizeof(ClientData), ENET_PACKET_FLAG_RELIABLE);
     enet_peer_send(peer, 0, packet);
     enet_host_flush(client);
 }
@@ -122,10 +117,25 @@ void NetworkManager::ProcessNetworkEvents() {
                     << " on channel " << event.channelID << ".\n";
                 // Clean up the packet now that we're done using it.
                 ClientData* clientData = reinterpret_cast<ClientData*>(event.packet->data);
-                MessageType messageType = clientData->start_flag;
+                MessageType messageType = clientData->flag;
                 if (messageType == MessageType::GAME_READY) {
+                    std::cout << "RECEBI MENSAGEM PARA INICIAR O JOGO" << std::endl;
                     // Definir a flag para iniciar o jogo.
                     readyToStartGame = true;
+                }
+                if (messageType == MessageType::MSG_ATTACK) {
+                    std::cout << "ESTOU RECEBENDO ATTACK NETWORK\nAttackStatus" <<  attackStatus << std::endl;
+                    if (attackStatus == true)
+                    {
+                        attackStatus = false;
+                        linesAdded = 0;
+                    }
+                    else {
+                        std::cout << "ESTOU RECEBENDO ATTACK NETWORK\nAttackStatus" << attackStatus << std::endl;
+                        attackStatus = true;
+                        linesAdded = clientData->blocksToSend;
+                    }
+
                 }
                 enet_packet_destroy(event.packet);
             }
@@ -151,7 +161,8 @@ void NetworkManager::ProcessNetworkEvents() {
 // Isto deve ser chamado para notificar todos os clientes que o jogo está pronto.
 void NetworkManager::notifyGameReady() {
     if (isHost) {
-        MessageType messageType = MessageType::GAME_READY;
+        ClientData readyMessage;
+        readyMessage.flag = MessageType::GAME_READY;
 
         for (size_t i = 0; i < client->peerCount; ++i) {
             ENetPeer* peer = &client->peers[i];
@@ -160,25 +171,42 @@ void NetworkManager::notifyGameReady() {
             if (peer->state == ENET_PEER_STATE_CONNECTED) {
                 char clientIp[128];
                 enet_address_get_host_ip(&peer->address, clientIp, sizeof(clientIp));
-                std::cout << "CLIENTE " << clientIp << " RECEBERA A MENSAGEM DE ";
+               // std::cout << "CLIENTE " << clientIp << " RECEBERA A MENSAGEM DE ";
 
                 char serverIp[128];
                 enet_address_get_host_ip(&client->address, serverIp, sizeof(serverIp));
                 std::cout << serverIp << std::endl;
 
-                std::cout << "CLIENTE " << peer->address.host << " RECEBERA A MENSAGEM DE " << client->address.host << std::endl;
-               // std::cout << "Enviando mensagem de jogo pronto para o cliente com ID: " << clientID << std::endl;
-                sendPacket(peer, messageType, &messageType, sizeof(messageType));
+                //std::cout << "CLIENTE " << peer->address.host << " RECEBERA A MENSAGEM DE " << client->address.host << std::endl;
+                sendPacket(peer, readyMessage);
             }
         }
         readyToStartGame = true;
     }
 }
 
-    //else {
-    //    // Esta função não seria chamada pelo cliente no uso normal, pois o cliente
-    //    // recebe a notificação do servidor. Você trataria isso no ProcessNetworkEvents.
-    //}
+void NetworkManager::notifyAttack(int blocksCount) {
+    ClientData attackMessage;
+    attackMessage.flag = MessageType::MSG_ATTACK;
+    attackMessage.blocksToSend = blocksCount;
+
+    std::cout << "estou enviando um ataque de: " << attackMessage.blocksToSend << std::endl;
+
+    if (isHost) {
+        for (size_t i = 0; i < client->peerCount; ++i) {
+            ENetPeer* peer = &client->peers[i];
+            if (peer->state == ENET_PEER_STATE_CONNECTED) {
+                std::cout << "SOU O HOST E TO ENVIANDO UM ATAQUE DE LINHAS " << attackMessage.blocksToSend << std::endl;
+                sendPacket(peer, attackMessage);
+            }
+        }
+    } else {
+        if (peer != nullptr && peer->state == ENET_PEER_STATE_CONNECTED) {
+            std::cout << "SOU O CLIENT E ESTOU ENVIANDO O PACOTE" << std::endl;
+            sendPacket(peer, attackMessage);
+        }
+    }
+}
 
 
 void NetworkManager::Disconnect() {
@@ -203,7 +231,6 @@ void NetworkManager::Disconnect() {
 }
 
 bool NetworkManager::IsConnected() {
-    //std::cout << "client" << client << "           " << "peer" << peer << std::endl;
     if (isHost) {
         return true;
     }
@@ -215,6 +242,14 @@ bool NetworkManager::IsConnected() {
 
 bool NetworkManager::isReadyToStartGame() {
     return readyToStartGame;
+}
+
+bool NetworkManager::getAttackStatus() {
+    return attackStatus;
+}
+
+int NetworkManager::getLinesAdded() {
+    return linesAdded;
 }
 
 ENetPeer* NetworkManager::getClients() const {
