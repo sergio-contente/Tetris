@@ -115,7 +115,7 @@ void NetworkManager::ProcessNetworkEvents() {
             std::cout << "Chegou o pacote ae" << std::endl;
             std::cout << "PEER DATA: " << event.peer->data << std::endl;
             std::cout << "PEER: " << peer << std::endl;
-            if (event.peer != nullptr){ //&& event.peer->data != nullptr) {
+            if (event.peer != nullptr){ //&& event.peer->data != nullptr) { //DANDO RUIM SE DESCOMENTAR
                 std::cout << "A packet of length " << event.packet->dataLength
                     << " containing " << event.packet->data
                     << " was received from " << event.peer->data
