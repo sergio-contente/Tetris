@@ -45,10 +45,12 @@ void GamePlayState::createTetromino() {
         this->lastHighScore = m_HighScore.getScore();
         m_context->m_states->Add(std::make_unique<GameOverState>(m_context, m_networkManager, this->lastHighScore), false);
         m_HighScore.reset();
+        Xvariation = -1;
+        Yvariation = -1;
     }
     mID = getRandomNumber(7);
     m_preview.reset(new Tetromino{ mTexture, mID });
-    m_preview->setPosition(sf::Vector2i{ 11, 12 });
+    m_preview->setPosition(sf::Vector2i{ 12, 13 });
 }
 
 
