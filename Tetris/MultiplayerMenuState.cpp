@@ -151,17 +151,17 @@ void MultiplayerMenuState::Update(const sf::Time& deltaTime) {
         m_context->m_states->PopCurrent();
     }
 
-    // Add code to move the background
-    static float backgroundX = 0.f; // These static variables will keep their values between updates
-    static float backgroundY = 0.f;
+    //// Add code to move the background
+    //static float backgroundX = 0.f; // These static variables will keep their values between updates
+    //static float backgroundY = 0.f;
     const float backgroundSpeedX = -100.f; // Speed of the background movement along X-axis
     const float backgroundSpeedY = -50.f;  // Speed of the background movement along Y-axis
 
     // Calculate new positions based on deltaTime (might get an overflow if the game runs for a long time)
-    backgroundX += backgroundSpeedX * deltaTime.asSeconds();
-    backgroundY += backgroundSpeedY * deltaTime.asSeconds();
+    *m_context->m_backgroundX += backgroundSpeedX * deltaTime.asSeconds();
+    *m_context->m_backgroundY += backgroundSpeedY * deltaTime.asSeconds();
 
-    m_backgroundSprite.setTextureRect(sf::IntRect(static_cast<int>(backgroundX), static_cast<int>(backgroundY), m_context->m_window->getSize().x, m_context->m_window->getSize().y));
+    m_backgroundSprite.setTextureRect(sf::IntRect(static_cast<int>(*m_context->m_backgroundX), static_cast<int>(*m_context->m_backgroundY), m_context->m_window->getSize().x, m_context->m_window->getSize().y));
 
 }
 
