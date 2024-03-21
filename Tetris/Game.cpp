@@ -2,7 +2,7 @@
 #include "Game.h"
 #include "StartMenuState.h"
 
-Game::Game() : m_context(std::make_shared<Context>())
+Game::Game() : m_context(std::make_shared<Context>()), m_networkManager(std::make_shared<NetworkManager>(m_context))
 {
     // Get the desktop resolution
     sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
@@ -10,7 +10,7 @@ Game::Game() : m_context(std::make_shared<Context>())
     // Create the window in full screen mode with the desktop resolution
     m_context->m_window->create(desktop, "Tetris", sf::Style::Fullscreen);
 
-    m_context->m_states->Add(std::make_unique<StartMenuState>(m_context));
+    m_context->m_states->Add(std::make_unique<StartMenuState>(m_context, m_networkManager));
 }
 
 Game::~Game()

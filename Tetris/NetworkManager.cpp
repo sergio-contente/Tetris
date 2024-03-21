@@ -6,6 +6,7 @@ NetworkManager::NetworkManager(std::shared_ptr <Context>& context) : m_context(c
     if (enet_initialize() != 0) {
         std::cerr << "An error occurred while initializing ENet.\n";
     }
+    
 }
 
 NetworkManager::~NetworkManager() {

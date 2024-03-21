@@ -6,6 +6,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+#include <enet/enet.h>
 
 #include "State.h"
 #include "Game.h"

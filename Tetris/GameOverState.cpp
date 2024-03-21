@@ -89,7 +89,11 @@ void GameOverState::Update(const sf::Time& deltaTime) {
     }
     if (m_isRetryButtonPressed)
     {
+        m_networkManager->Disconnect();
         m_context->m_states->PopCurrent();
+        m_context->m_states->PopCurrent();
+        m_context->m_states->PopCurrent();
+        
     }
     else if (m_isMainMenuButtonPressed)
     {
