@@ -44,7 +44,9 @@ void GameOverState::Draw() {
     m_context->m_window->clear(sf::Color::Blue);
     m_context->m_window->draw(m_gameTitle);
     m_context->m_window->draw(m_HighScoreText);
-    m_context->m_window->draw(m_retryButton);
+    if (!m_networkManager->IsConnected()) {
+        m_context->m_window->draw(m_retryButton);
+    }
     m_context->m_window->draw(m_mainMenuButton);
     m_context->m_window->display();
 }
@@ -64,13 +66,20 @@ void GameOverState::ProcessInput() {
                 m_isMainMenuButtonSelected = !m_isRetryButtonSelected;
                 break;
             case sf::Keyboard::Return:
-                if (m_isRetryButtonSelected) {
-                    m_isRetryButtonPressed = true;
+                if (!m_networkManager->IsConnected()) {
+                    if (m_isRetryButtonSelected) {
+                        m_isRetryButtonPressed = true;
+                    }
+                    else if (m_isMainMenuButtonSelected) {
+                        m_isMainMenuButtonPressed = true;
+                    }
+                    break;
                 }
-                else if (m_isMainMenuButtonSelected) {
-                    m_isMainMenuButtonPressed = true;
+                else {
+                    if (m_isMainMenuButtonSelected) {
+                        m_isMainMenuButtonPressed = true;
+                    }
                 }
-                break;
             default:
                 break;
             }
@@ -89,9 +98,9 @@ void GameOverState::Update(const sf::Time& deltaTime) {
     }
     if (m_isRetryButtonPressed)
     {
-        m_networkManager->Disconnect();
-        m_context->m_states->PopCurrent();
-        m_context->m_states->PopCurrent();
+        if (m_networkManager->IsConnected()) {
+            m_networkManager->Disconnect();
+        }
         m_context->m_states->PopCurrent();
         
     }
