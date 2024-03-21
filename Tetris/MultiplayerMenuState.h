@@ -23,6 +23,9 @@ private:
 	sf::Text m_clientButton;
 	sf::Text m_exitButton;
 
+	sf::Sprite m_backgroundSprite;
+	sf::Sprite m_logoSprite;
+
 	bool m_isHostButtonSelected;
 	bool m_isHostButtonPressed;
 
