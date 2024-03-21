@@ -1,4 +1,5 @@
 #include "Tetronimo.h"
+#include "Constants.h"
 
 /*
  * Block Shape 4 x 4
@@ -93,8 +94,11 @@ void Tetromino::move(Direction dir) {
 }
 
 void Tetromino::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+    float x_offset = (- 18.f * scale * 10 / 2 + real_widht / 2) - block_size * 5;
+    float y_offset = (-18.f * scale * 18 / 2 + real_height / 2);
     for (int i = 0; i < 4; ++i) {
-        mSprite.setPosition((mBlock[i].x * 18) + (mPosition.x * 18), (mBlock[i].y * 18) + (mPosition.y * 18));
+        mSprite.setPosition((mBlock[i].x * 18 * scale) + (mPosition.x * 18 * scale) + x_offset, (mBlock[i].y * 18 * scale) + (mPosition.y * 18 * scale) + y_offset);
+        mSprite.setScale(scale, scale); // Scales the sprite by 2 times in both x and y directions
         target.draw(mSprite);
     }
 }

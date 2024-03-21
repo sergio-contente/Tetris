@@ -1,8 +1,6 @@
 #ifndef GAMEOVERSTATE_H
 #define GAMEOVERSTATE_H
 
-//
-
 //#include <windows.h>
 
 #include <SFML/Graphics.hpp>

@@ -1,4 +1,5 @@
 #include "GameOverState.h"
+#include "Constants.h"
 
 GameOverState::GameOverState(std::shared_ptr <Context>&context, std::shared_ptr <NetworkManager>& m_networkManager, int lastHighScore) :
     m_context(context),
@@ -18,24 +19,28 @@ void GameOverState::Init() {
     //Title
     m_gameTitle.setFont(m_context->m_assets->GetFont("Start_Menu_Font"));
     m_gameTitle.setString("Game Over");
+    m_gameTitle.setCharacterSize(60);
     m_gameTitle.setOrigin(m_gameTitle.getLocalBounds().width / 2.f, m_gameTitle.getLocalBounds().height / 2.f);
     m_gameTitle.setPosition(m_context->m_window->getSize().x / 2.f, m_context->m_window->getSize().y / 2 - 100.f);
 
     //Highscore
     m_HighScoreText.setFont(m_context->m_assets->GetFont("Start_Menu_Font"));
     m_HighScoreText.setString("Highscore: " + std::to_string(m_HighScore));
+    m_HighScoreText.setCharacterSize(40);
     m_HighScoreText.setOrigin(m_HighScoreText.getLocalBounds().width / 2, m_HighScoreText.getLocalBounds().height / 2);
     m_HighScoreText.setPosition(m_context->m_window->getSize().x / 2, m_context->m_window->getSize().y / 2 - 50.f);
 
     //Try Again Button
     m_retryButton.setFont(m_context->m_assets->GetFont("Start_Menu_Font"));
     m_retryButton.setString("Try Again");
+    m_retryButton.setCharacterSize(40);
     m_retryButton.setOrigin(m_retryButton.getLocalBounds().width / 2, m_retryButton.getLocalBounds().height / 2);
     m_retryButton.setPosition(m_context->m_window->getSize().x / 2, m_context->m_window->getSize().y / 2);
 
     //Main Menu Button
     m_mainMenuButton.setFont(m_context->m_assets->GetFont("Start_Menu_Font"));
     m_mainMenuButton.setString("Main Menu");
+    m_mainMenuButton.setCharacterSize(40);
     m_mainMenuButton.setOrigin(m_mainMenuButton.getLocalBounds().width / 2, m_mainMenuButton.getLocalBounds().height / 2);
     m_mainMenuButton.setPosition(m_context->m_window->getSize().x / 2, m_context->m_window->getSize().y / 2 + 50.f);
 }

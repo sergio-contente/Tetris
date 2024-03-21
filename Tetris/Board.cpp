@@ -1,4 +1,5 @@
 #include "Board.h"
+#include "Constants.h"
 
 FieldInfo::FieldInfo(sf::Texture& texture, int id) {
     sf::IntRect rect{ (id % 7) * 18, 0, 18,18 };
@@ -38,13 +39,16 @@ int Board::convert2D_to_1D(int x, int y) {
 }
 
 void Board::draw(sf::RenderWindow& window) {
+    float x_offset = (-block_size * scale * mSize.x / 2 + real_widht / 2) - block_size * 5;
+    float y_offset = - block_size * scale * mSize.y / 2+ real_height/2;
     for (int x = 0; x < mSize.x; ++x) {
         for (int y = 0; y < mSize.y; ++y) {
 
             auto field = getField(x, y);
             //if field has not been occupied yet, mInfo would be assigned to nullptr
             if (field->mOccupied && field->mVisible) {
-                field->mInfo->mSprite.setPosition(x * 18.f, y * 18.f);
+                field->mInfo->mSprite.setPosition(x * 18.f * scale + x_offset, y * 18.f * scale + y_offset);
+                field->mInfo->mSprite.setScale(scale, scale);
                 window.draw(field->mInfo->mSprite);
             }
         }
