@@ -131,6 +131,9 @@ void GamePlayState::ProcessInput() {
             else if (e.key.code == sf::Keyboard::I) {
                 m_HighScore.addClearedLines(10);
             }
+            else if (e.key.code == sf::Keyboard::L) {
+                m_board->addAttackRows(3);
+            }
         }
     }
 }

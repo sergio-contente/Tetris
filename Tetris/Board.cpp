@@ -26,9 +26,9 @@ Board::Board(sf::Vector2i size, GamePlayState& game, std::shared_ptr <NetworkMan
     }
 }
 
-void Board::addBlock(int id, std::array<sf::Vector2i, 4> block) {
-    for (int i = 0; i < 4; ++i) {
-        auto field = getField(block[i].x, block[i].y);
+void Board::addBlock(int id, const std::array<sf::Vector2i, 4>& positions) {
+    for (const auto& position : positions) {
+        Field* field = getField(position.x, position.y);
         field->mOccupied = true;
         field->mInfo = mFieldInfos[id].get();
     }
@@ -88,33 +88,34 @@ void Board::printBoard() {
 
 void Board::markLinesForRemoval() {
     if (mToRemoveBlocks) return;
-    int countClearedLines{ 0 };
-    for (int y = mSize.y - 1; y > 0; --y) {
-        int counter = 0;
+
+    int countClearedLines = 0;
+    for (int y = mSize.y - 1; y >= 0; --y) {
+        bool isLineComplete = true;
         for (int x = 0; x < mSize.x; ++x) {
-            auto field = getField(x, y);
-            if (field->mOccupied) {
-                counter++;
-            }
-            if (counter == 10) { 
-                mYCleaned.push_back(y);
-                mToRemoveBlocks = true;
-                countClearedLines++;
+            if (!getField(x, y)->mOccupied) {
+                isLineComplete = false;
+                break;
             }
         }
-        counter = 0;
+        if (isLineComplete) {
+            mYCleaned.push_back(y);
+            mToRemoveBlocks = true;
+            countClearedLines++;
+        }
     }
+
     mGame.m_HighScore.addClearedLines(countClearedLines);
-    countBlocks = countClearedLines;
-    if (countBlocks != 0) {
-        m_networkManager->notifyAttack(countBlocks);
+    if (countClearedLines > 0) {
+        m_networkManager->notifyAttack(countClearedLines);
     }
-    std::sort(mYCleaned.begin(), mYCleaned.end(), [](int left, int right) { return left < right; });
 }
+
+
 
 void Board::cleanLines() {
     if (mYCleaned.empty()) return;
-
+    std::cout << "Limpando as linhas" << std::endl;
     for (auto i : mYCleaned) {
         for (auto y = i; y >= 0; --y) {
             for (auto x = 0; x < mSize.x; ++x) {
@@ -172,31 +173,31 @@ int Board::getBlocksFromEnemy() {
 }
 
 void Board::addAttackRows(int linestoAdd) {
-    if (linestoAdd <= 0) return;
-    std::cout << "COUNT BLOCKS: " << linestoAdd << std::endl;
-    // Move todas as linhas existentes para cima.
+    // Deslocando as linhas existentes para cima.
     for (int y = 0; y < mSize.y - linestoAdd; ++y) {
         for (int x = 0; x < mSize.x; ++x) {
             *getField(x, y) = *getField(x, y + linestoAdd);
         }
     }
 
-    // Adiciona as novas linhas de ataque na parte inferior.
+    // Adicionando novas linhas de ataque com lacunas aleatórias.
     for (int i = 0; i < linestoAdd; ++i) {
-        int newY = mSize.y - 1 - i; // Índice da nova linha na parte inferior do tabuleiro.
-        int gapPosition = rand() % mSize.x; // Escolhe uma posição aleatória para a lacuna.
-
+        int newY = mSize.y - 1 - i;
+        int gapPosition = rand() % mSize.x; // Posição aleatória para a lacuna na linha.
         for (int x = 0; x < mSize.x; ++x) {
-            if (x == gapPosition) continue; // Pula a posição aleatória, deixando uma lacuna.
-
-            // Id do bloco que queremos adicionar. Assumindo que você tenha blocos de ID 0 a 6.
-            int blockId = 0;
-            std::array<sf::Vector2i, 4> blockPositions = {
-                sf::Vector2i(x, newY), sf::Vector2i(x, newY), sf::Vector2i(x, newY), sf::Vector2i(x, newY)
-            };
-            // Adiciona um bloco na posição (x, newY).
-            std::cout << "TO ADICIONANDO BLOCO NA POSICAO: (" << x << ", " << newY << ")" << std::endl;
-            addBlock(blockId, blockPositions);
+            if (x != gapPosition) { // Se não for a posição da lacuna, adiciona o bloco.
+                addBlock(0, { sf::Vector2i(x, newY) }); // Supõe-se que 'addBlock' aceite o ID do bloco e uma única posição.
+            }
         }
     }
+}
+
+bool Board::isOccupiedGap(std::array<sf::Vector2i, 4> block, int x) {
+    for (int i = 0; i < 4; ++i) {
+        auto  field = getField(block[i].x, block[i].y);
+        if ((field->mOccupied) && (block[i].x == x)) {
+            return true;
+        }
+    }
+    return false;
 }

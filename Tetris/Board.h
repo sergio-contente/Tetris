@@ -45,7 +45,7 @@ public:
 
     void update(const sf::Time& dt);
     void clean();
-    void addBlock(int id, std::array<sf::Vector2i, 4> block);
+    void addBlock(int id, const std::array<sf::Vector2i, 4>& positions);
     bool isOccupied(std::array<sf::Vector2i, 4> block);
     void draw(sf::RenderWindow& window);
     void printBoard();
@@ -53,6 +53,7 @@ public:
     Field* getField(int x, int y);
     int getBlocksFromEnemy();
     void addAttackRows(int linesToAdd);
+    bool isOccupiedGap(std::array<sf::Vector2i, 4> block, int x);
 
 private:
     int convert2D_to_1D(int x, int y);
