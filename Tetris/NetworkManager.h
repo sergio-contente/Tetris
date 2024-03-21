@@ -16,9 +16,13 @@
 
 enum class MessageType {
     GAME_READY,
-    ASSIGN_ID
+    MSG_ATTACK
 };
 
+struct ClientData {
+    MessageType flag;
+    int blocksToSend;
+};
 
 class NetworkManager : public std::enable_shared_from_this<NetworkManager> {
 public:
@@ -29,23 +33,28 @@ public:
     void ProcessNetworkEvents();
     void Disconnect();
     bool IsConnected();
-    bool isReadyToStartGame();
     bool StartHost(uint16_t port);
-    void assignClientID(ENetPeer* peer);
-    void removeClientID(ENetPeer* peer);
-    void sendPacket(ENetPeer* peer, MessageType type, const void* data, size_t dataLength);
-    void notifyGameReady();
+    void sendPacket(ENetPeer* peer, const ClientData& messageData);
 
-    std::map<ENetPeer*, int> getClientIDs();
+    void notifyGameReady();
+    void notifyAttack(int blocksCount);
+
+    bool isReadyToStartGame();
+    bool getAttackStatus();
+    int getLinesAdded();
+    void resetLinesAdded();
+
+    ENetPeer* getClients() const;
     ENetPeer* peer = nullptr;
     ENetHost* client = nullptr;
 
 private:
 
-    std::map<ENetPeer*, int> clientIDs;
-    int nextClientID = 1;  // Starting from 1 for client IDs
     bool isHost = false;
     bool readyToStartGame = false;
+    bool attackStatus = false;
+
+    int linesAdded = 0;
 
     std::shared_ptr <Context>& m_context;
 };

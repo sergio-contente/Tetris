@@ -158,7 +158,7 @@ sfml-audio-d.lib
     <ClCompile Include="GameOverState.cpp" />
     <ClCompile Include="GamePlayState.cpp" />
     <ClCompile Include="Highscore.cpp" />
-    <ClCompile Include="HostGameState.cpp" />
+    <ClCompile Include="ServerGameState.cpp" />
     <ClCompile Include="MultiplayerMenuState.cpp" />
     <ClCompile Include="NetworkManager.cpp" />
     <ClCompile Include="StartMenuState.cpp" />
@@ -177,7 +177,7 @@ sfml-audio-d.lib
     <ClInclude Include="GameOverState.h" />
     <ClInclude Include="GamePlayState.h" />
     <ClInclude Include="Highscore.h" />
-    <ClInclude Include="HostGameState.h" />
+    <ClInclude Include="ServerGameState.h" />
     <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="MultiplayerMenuState.h" />
     <ClInclude Include="NetworkManager.h" />

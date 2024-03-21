@@ -6,7 +6,7 @@ GamePlayState::GamePlayState(std::shared_ptr <Context>& context, std::shared_ptr
 {
     m_context->m_assets->LoadTexture("Blocks", "assets/tetris-texture.png");
     mTexture = m_context->m_assets->GetTexture("Blocks");
-    this->m_board = std::make_unique<Board>(sf::Vector2i{ 10, 18 }, *this);
+    this->m_board = std::make_unique<Board>(sf::Vector2i{ 10, 18 }, *this, m_networkManager);
     createTetromino();
 }
 
@@ -104,6 +104,13 @@ void GamePlayState::Update(const sf::Time& deltaTime) {
         }
         createTetromino();
     }
+
+    if (!m_networkManager->IsConnected()) {
+        m_context->m_states->PopCurrent();
+        m_context->m_states->PopCurrent();
+    }
+
+    m_networkManager->ProcessNetworkEvents();
 
 }
 void GamePlayState::Draw() {

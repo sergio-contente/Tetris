@@ -93,6 +93,7 @@ void GameOverState::Update(const sf::Time& deltaTime) {
     }
     else if (m_isMainMenuButtonPressed)
     {
+        m_networkManager->Disconnect();
         m_context->m_states->PopAll();
         m_context->m_states->Add(std::make_unique<StartMenuState>(m_context, m_networkManager), true);
     }

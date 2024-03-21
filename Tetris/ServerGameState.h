@@ -1,5 +1,5 @@
-#ifndef HOSTGAMESTATE_H
-#define HOSTGAMESTATE_H
+#ifndef SERVERGAMESTATE_H
+#define SERVERGAMESTATE_H
 
 //#define NOMINMAX
 //#include <windows.h>
@@ -13,7 +13,7 @@
 #include "AssetManager.h"
 
 
-class HostGameState : public State {
+class ServerGameState : public State {
 private:
     sf::Text m_gameTitle;
     sf::Text m_playButton;
@@ -29,14 +29,14 @@ private:
     std::map<ENetPeer*, int> clientIDs;
 
 public:
-    HostGameState(std::shared_ptr<Context>& context, std::shared_ptr<NetworkManager>& m_networkManager)
+    ServerGameState(std::shared_ptr<Context>& context, std::shared_ptr<NetworkManager>& m_networkManager)
         : m_context(context),
         m_networkManager(m_networkManager),
         m_isPlayButtonSelected(true),
         m_isPlayButtonPressed(false)
     {}
 
-    ~HostGameState(){}
+    ~ServerGameState(){}
 
     void Init() override;
 
@@ -49,4 +49,4 @@ public:
     void MenuIdle();
 };
 
-#endif // HOSTGAMESTATE_H
+#endif // SERVERGAMESTATE_H

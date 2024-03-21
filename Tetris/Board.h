@@ -39,7 +39,7 @@ class GamePlayState;
 
 class Board {
 public:
-    Board(sf::Vector2i size, GamePlayState& game);
+    Board(sf::Vector2i size, GamePlayState& game, std::shared_ptr <NetworkManager>& m_networkManager);
     Board(const Board& other) = delete;
     Board& operator= (const Board& other) = delete;
 
@@ -51,11 +51,16 @@ public:
     void printBoard();
     inline bool isToRemoveBlocks() const { return mToRemoveBlocks; }
     Field* getField(int x, int y);
+    int getBlocksFromEnemy();
+    void addAttackRows(int linesToAdd);
+
 private:
     int convert2D_to_1D(int x, int y);
     void cleanLines();
     void markLinesForRemoval();
     void blink();
+
+    std::shared_ptr <NetworkManager>& m_networkManager;
 
     GamePlayState& mGame;
     std::unordered_map<unsigned int, std::unique_ptr<Field>>        mFields;
@@ -64,6 +69,7 @@ private:
     std::vector<int>                                                mYCleaned;
     float                                                           mElapsedTime;
     bool                                                            mToRemoveBlocks;
+    int countBlocks;
 
 
 };

@@ -111,7 +111,7 @@ void MultiplayerMenuState::Update(const sf::Time& deltaTime) {
     // Handle button press actions
     if (m_isHostButtonPressed) {
         // Example: Transition to a "host game" state
-        m_context->m_states->Add(std::make_unique<HostGameState>(m_context, m_networkManager), true);
+        m_context->m_states->Add(std::make_unique<ServerGameState>(m_context, m_networkManager), true);
         m_isHostButtonPressed = false; // Reset the button pressed state
     }
     else if (m_isClientButtonPressed) {

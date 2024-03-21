@@ -11,13 +11,13 @@
  // 4 piece
 unsigned int BlockInfo4x4[7][4] = {
 
-        {4, 5,  8,  9},    // Square
-        {5, 9, 13,  12},    // Reverse-L
-        {5, 9, 10,  14},    // Z
-        {5, 9,  8,  12},    // Reverse-Z
-        {5, 8,  9,  10},    // T
-        {5, 9,  13, 14},    // L
-        {1, 5,  9,  13},    // I
+        {4, 5,  8,  9},    // Square => id 0
+        {5, 9, 13,  12},    // Reverse-L => id 1
+        {5, 9, 10,  14},    // Z => id 2
+        {5, 9,  8,  12},    // Reverse-Z => id 3
+        {5, 8,  9,  10},    // T => id 4
+        {5, 9,  13, 14},    // L => id 5
+        {1, 5,  9,  13},    // I => id 6
 };
 
 Tetromino::Tetromino(sf::Texture& texture, int id)
