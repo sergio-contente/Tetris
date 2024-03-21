@@ -12,7 +12,7 @@ ClientGameState::~ClientGameState() {
 
 void ClientGameState::Init() {
     // Tenta conectar ao servidor; substitua "localhost" e "1234" conforme apropriado
-    if (!m_networkManager->StartClient("localhost", 1234)) {
+    if (!m_networkManager->StartClient("192.168.200.20", 1234)) {
         std::cerr << "Failed to connect to the host." << std::endl;
         m_context->m_states->PopCurrent();
     }

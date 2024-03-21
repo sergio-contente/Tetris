@@ -43,10 +43,6 @@ void StartMenuState::Init() {
 	// Scale the logo sprite based on screen resolution (example scaling factor)
 	//float scaleX = m_context->m_window->getSize().x / 1920.f; // Assuming 1920 is the reference width
 	//float scaleY = m_context->m_window->getSize().y / 1080.f; // Assuming 1080 is the reference height
-	float scaleX = 1.f; // Assuming 1920 is the reference width
-	float scaleY = 1.f; // Assuming 1080 is the reference height
-	m_logoSprite.setScale(scaleX, scaleY);
-
 
 	//Title
 	//m_gameTitle.setFont(m_context->m_assets->GetFont("Start_Menu_Font"));
@@ -54,27 +50,24 @@ void StartMenuState::Init() {
 	//m_gameTitle.setOrigin(m_gameTitle.getLocalBounds().width / 2, m_gameTitle.getLocalBounds().height / 2);
 	//m_gameTitle.setPosition(m_context->m_window->getSize().x / 2, m_context->m_window->getSize().y / 2 - 150.f);
 
-	// To resize the buttons according to the screen size
-	float buttonScale = std::min(scaleX, scaleY);
-
 	//Play Button
 	m_playButton.setFont(m_context->m_assets->GetFont("Start_Menu_Font"));
 	m_playButton.setString("Play");
-	m_playButton.setCharacterSize(static_cast<unsigned int>(60.f * buttonScale));
+	m_playButton.setCharacterSize(static_cast<unsigned int>(60.f));
 	m_playButton.setOrigin(m_playButton.getLocalBounds().width / 2, m_playButton.getLocalBounds().height / 2);
 	m_playButton.setPosition(m_context->m_window->getSize().x / 2, m_context->m_window->getSize().y / 2 * 0.95);
 
 	// Multiplayer Button
 	m_multiplayerButton.setFont(m_context->m_assets->GetFont("Start_Menu_Font"));
 	m_multiplayerButton.setString("Multiplayer");
-	m_multiplayerButton.setCharacterSize(static_cast<unsigned int>(60.f * buttonScale));
+	m_multiplayerButton.setCharacterSize(static_cast<unsigned int>(60.f));
 	m_multiplayerButton.setOrigin(m_multiplayerButton.getLocalBounds().width / 2, m_multiplayerButton.getLocalBounds().height / 2);
 	m_multiplayerButton.setPosition(m_context->m_window->getSize().x / 2, m_context->m_window->getSize().y / 2 * 1.15);
 
 	//Exit Button
 	m_exitButton.setFont(m_context->m_assets->GetFont("Start_Menu_Font"));
 	m_exitButton.setString("Exit");
-	m_exitButton.setCharacterSize(static_cast<unsigned int>(60.f * buttonScale));
+	m_exitButton.setCharacterSize(static_cast<unsigned int>(60.f));
 	m_exitButton.setOrigin(m_exitButton.getLocalBounds().width / 2, m_exitButton.getLocalBounds().height / 2);
 	m_exitButton.setPosition(m_context->m_window->getSize().x / 2, m_context->m_window->getSize().y / 2 * 1.35);
 
@@ -174,7 +167,7 @@ void StartMenuState::Update(const sf::Time& deltaTime) {
 	else if (m_isMultiplayerButtonPressed)
 	{
 		// Here, you would transition to your multiplayer state or setup screen
-		m_context->m_states->Add(std::make_unique<MultiplayerMenuState>(m_context, m_networkManager), true);
+		m_context->m_states->Add(std::make_unique<MultiplayerMenuState>(m_context, m_networkManager), false);
 		m_isMultiplayerButtonPressed = false; // Reset the button pressed state
 	}
 	else if (m_isExitButtonPressed)
