@@ -121,6 +121,7 @@ void MultiplayerMenuState::Update(const sf::Time& deltaTime) {
     }
     else if (m_isExitButtonPressed) {
         m_isExitButtonPressed = false;
+        m_context->m_states->PopCurrent();
     }
 }
 

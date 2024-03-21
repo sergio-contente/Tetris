@@ -174,7 +174,7 @@ void StartMenuState::Update(const sf::Time& deltaTime) {
 	else if (m_isMultiplayerButtonPressed)
 	{
 		// Here, you would transition to your multiplayer state or setup screen
-		m_context->m_states->Add(std::make_unique<MultiplayerMenuState>(m_context, m_networkManager), true);
+		m_context->m_states->Add(std::make_unique<MultiplayerMenuState>(m_context, m_networkManager), false);
 		m_isMultiplayerButtonPressed = false; // Reset the button pressed state
 	}
 	else if (m_isExitButtonPressed)
