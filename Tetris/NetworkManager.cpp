@@ -201,23 +201,59 @@ void NetworkManager::notifyAttack(int blocksCount) {
 
 
 void NetworkManager::Disconnect() {
-    if (peer != nullptr) {
-        enet_peer_disconnect(peer, 0);
-        // Allow some time for the disconnect to be acknowledged
-        ENetEvent event;
-        while (enet_host_service(client, &event, 3000) > 0) {
-            switch (event.type) {
-            case ENET_EVENT_TYPE_RECEIVE:
-                enet_packet_destroy(event.packet);
-                break;
-            case ENET_EVENT_TYPE_DISCONNECT:
-                std::cout << "Disconnection succeeded.\n";
-                return;
+    //if (peer != nullptr) {
+    //    enet_peer_disconnect(peer, 0);
+    //    // Allow some time for the disconnect to be acknowledged
+    //    ENetEvent event;
+    //    while (enet_host_service(client, &event, 3000) > 0) {
+    //        switch (event.type) {
+    //        case ENET_EVENT_TYPE_RECEIVE:
+    //            enet_packet_destroy(event.packet);
+    //            break;
+    //        case ENET_EVENT_TYPE_DISCONNECT:
+    //            std::cout << "Disconnection succeeded.\n";
+    //            return;
+    //        }
+    //    }
+    //    // If the disconnection wasn't acknowledged, reset the peer
+    //    enet_peer_reset(peer);
+    //    peer = nullptr;
+    //}
+    if (isHost) {
+        // Se for o host, desconecte todos os clientes conectados primeiro.
+        ENetPeer* peer = nullptr;
+        for (size_t i = 0; i < client->peerCount; ++i) {
+            peer = &client->peers[i];
+            if (peer->state != ENET_PEER_STATE_DISCONNECTED) {
+                enet_peer_disconnect_now(peer, 0); // Força a desconexão imediata.
             }
         }
-        // If the disconnection wasn't acknowledged, reset the peer
+
+        // Agora destrua o host do servidor.
+        enet_host_destroy(client);
+        client = nullptr;
+        isHost = false;
+    }
+    else if (peer != nullptr) {
+        // Se for um cliente, inicie a desconexão.
+        enet_peer_disconnect(peer, 0);
+        // Permita algum tempo para a desconexão ser reconhecida.
+        ENetEvent event;
+        while (enet_host_service(client, &event, 3000) > 0) {
+            if (event.type == ENET_EVENT_TYPE_RECEIVE) {
+                enet_packet_destroy(event.packet);
+            }
+            else if (event.type == ENET_EVENT_TYPE_DISCONNECT) {
+                std::cout << "Disconnection succeeded.\n";
+                break;
+            }
+        }
+        // Se a desconexão não foi reconhecida, reinicie o peer.
         enet_peer_reset(peer);
         peer = nullptr;
+        // Destrua o host do cliente.
+        enet_host_destroy(client);
+        client = nullptr;
     }
 }
 

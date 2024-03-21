@@ -105,6 +105,11 @@ void GamePlayState::Update(const sf::Time& deltaTime) {
         createTetromino();
     }
 
+    if (!m_networkManager->IsConnected()) {
+        m_context->m_states->PopCurrent();
+        m_context->m_states->PopCurrent();
+    }
+
     m_networkManager->ProcessNetworkEvents();
 
 }
