@@ -75,7 +75,7 @@ bool NetworkManager::StartHost(uint16_t port) {
 
     ENetAddress address;
     // Configura o host para ouvir apenas no localhost (127.0.0.1)
-    enet_address_set_host(&address, "localhost");
+    enet_address_set_host(&address, "192.168.200.20");
     address.port = port;
 
     // Cria um host que pode aceitar até 32 conexões de entrada
