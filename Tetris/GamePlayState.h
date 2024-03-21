@@ -25,6 +25,8 @@ private:
     std::unique_ptr <Tetromino> m_tetromino;
     std::unique_ptr <Tetromino >m_preview;
     std::unique_ptr <Board> m_board;
+    sf::Sprite m_backgroundSprite;
+    sf::Sprite m_gameHud;
     sf::Time mElapsedTime;
     int mID;
 public:

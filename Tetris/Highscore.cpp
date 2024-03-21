@@ -1,20 +1,20 @@
 #include "Highscore.h"
+#include "Constants.h"
 
 Highscore::Highscore()
     : mFont(), mLevelText(), mScoreText(), mClearedLinesText(), mScore(0), mLoadSoftScore(0),
     mLinesCleared(0) {
     mFont.loadFromFile("assets/Computerfont.ttf");
     mScoreText.setFont(mFont);
-    mScoreText.setCharacterSize(15);
+    mScoreText.setCharacterSize(real_height * 0.023 * scale);
 
     mLevelText.setFont(mFont);
-    mLevelText.setCharacterSize(15);
-    mScoreText.setPosition(sf::Vector2f{ 10 * 18 + 3, 50.f });
-    mLevelText.setPosition(sf::Vector2f{ 10 * 18 + 3, 100.f });
-
+    mLevelText.setCharacterSize(real_height * 0.023 * scale);
+    mScoreText.setPosition(sf::Vector2f{ (x_blocs * block_size * scale + real_widht / 2) - block_size * scale * 6, real_height / 2 * 0.65 - block_size * 6});
+    mLevelText.setPosition(sf::Vector2f{ (x_blocs * block_size * scale + real_widht / 2) - block_size * scale * 6, real_height / 2 * 0.85 - block_size * 6});
     mClearedLinesText.setFont(mFont);
-    mClearedLinesText.setCharacterSize(15);
-    mClearedLinesText.setPosition(10 * 18 + 3, 150.f);
+    mClearedLinesText.setCharacterSize(real_height * 0.023 * scale);
+    mClearedLinesText.setPosition((x_blocs * block_size * scale + real_widht / 2) - block_size * scale * 6, real_height / 2 * 1.05 - block_size * 6);
 }
 
 void Highscore::update(const sf::Time& dt) {

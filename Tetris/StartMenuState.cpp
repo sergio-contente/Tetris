@@ -41,43 +41,43 @@ void StartMenuState::Init() {
 	m_logoSprite.setPosition(m_context->m_window->getSize().x / 2, m_context->m_window->getSize().y / 4);
 
 	// Scale the logo sprite based on screen resolution (example scaling factor)
-	float scaleX = m_context->m_window->getSize().x / 1920.f; // Assuming 1920 is the reference width
-	float scaleY = m_context->m_window->getSize().y / 1080.f; // Assuming 1080 is the reference height
+	//float scaleX = m_context->m_window->getSize().x / 1920.f; // Assuming 1920 is the reference width
+	//float scaleY = m_context->m_window->getSize().y / 1080.f; // Assuming 1080 is the reference height
+	float scaleX = 1.f; // Assuming 1920 is the reference width
+	float scaleY = 1.f; // Assuming 1080 is the reference height
 	m_logoSprite.setScale(scaleX, scaleY);
 
 
 	//Title
-	m_gameTitle.setFont(m_context->m_assets->GetFont("Start_Menu_Font"));
-	m_gameTitle.setString("Tetris");
-	m_gameTitle.setOrigin(m_gameTitle.getLocalBounds().width / 2, m_gameTitle.getLocalBounds().height / 2);
-	m_gameTitle.setPosition(m_context->m_window->getSize().x / 2, m_context->m_window->getSize().y / 2 - 150.f);
+	//m_gameTitle.setFont(m_context->m_assets->GetFont("Start_Menu_Font"));
+	//m_gameTitle.setString("Tetris");
+	//m_gameTitle.setOrigin(m_gameTitle.getLocalBounds().width / 2, m_gameTitle.getLocalBounds().height / 2);
+	//m_gameTitle.setPosition(m_context->m_window->getSize().x / 2, m_context->m_window->getSize().y / 2 - 150.f);
+
+	// To resize the buttons according to the screen size
+	float buttonScale = std::min(scaleX, scaleY);
 
 	//Play Button
 	m_playButton.setFont(m_context->m_assets->GetFont("Start_Menu_Font"));
 	m_playButton.setString("Play");
+	m_playButton.setCharacterSize(static_cast<unsigned int>(60.f * buttonScale));
 	m_playButton.setOrigin(m_playButton.getLocalBounds().width / 2, m_playButton.getLocalBounds().height / 2);
-	m_playButton.setPosition(m_context->m_window->getSize().x / 2, m_context->m_window->getSize().y / 2 - 50.f);
-	m_playButton.setCharacterSize(20.f);
+	m_playButton.setPosition(m_context->m_window->getSize().x / 2, m_context->m_window->getSize().y / 2 * 0.95);
 
 	// Multiplayer Button
 	m_multiplayerButton.setFont(m_context->m_assets->GetFont("Start_Menu_Font"));
 	m_multiplayerButton.setString("Multiplayer");
+	m_multiplayerButton.setCharacterSize(static_cast<unsigned int>(60.f * buttonScale));
 	m_multiplayerButton.setOrigin(m_multiplayerButton.getLocalBounds().width / 2, m_multiplayerButton.getLocalBounds().height / 2);
-	m_multiplayerButton.setPosition(m_context->m_window->getSize().x / 2, m_context->m_window->getSize().y / 2);
-	m_multiplayerButton.setCharacterSize(20.f);
+	m_multiplayerButton.setPosition(m_context->m_window->getSize().x / 2, m_context->m_window->getSize().y / 2 * 1.15);
 
 	//Exit Button
 	m_exitButton.setFont(m_context->m_assets->GetFont("Start_Menu_Font"));
 	m_exitButton.setString("Exit");
+	m_exitButton.setCharacterSize(static_cast<unsigned int>(60.f * buttonScale));
 	m_exitButton.setOrigin(m_exitButton.getLocalBounds().width / 2, m_exitButton.getLocalBounds().height / 2);
-	m_exitButton.setPosition(m_context->m_window->getSize().x / 2, m_context->m_window->getSize().y / 2 + 50.f);
-	m_exitButton.setCharacterSize(20.f);
+	m_exitButton.setPosition(m_context->m_window->getSize().x / 2, m_context->m_window->getSize().y / 2 * 1.35);
 
-
-	// For Play and Exit buttons, you can adjust character size or scale them similarly to the logo sprite
-	float buttonScale = std::min(scaleX, scaleY); // You might want to scale buttons less aggressively
-	m_playButton.setCharacterSize(static_cast<unsigned int>(20.f * buttonScale));
-	m_exitButton.setCharacterSize(static_cast<unsigned int>(20.f * buttonScale));
 
 }
 
@@ -182,4 +182,17 @@ void StartMenuState::Update(const sf::Time& deltaTime) {
 		m_context->m_states->PopAll();
 		m_isExitButtonPressed = false; // Reset the button pressed state
 	}
+
+	// Add code to move the background
+	static float backgroundX = 0.f; // These static variables will keep their values between updates
+	static float backgroundY = 0.f;
+	const float backgroundSpeedX = 100.f; // Speed of the background movement along X-axis
+	const float backgroundSpeedY = 50.f;  // Speed of the background movement along Y-axis
+
+	// Calculate new positions based on deltaTime (might get an overflow if the game runs for a long time)
+	backgroundX += backgroundSpeedX * deltaTime.asSeconds();
+	backgroundY += backgroundSpeedY * deltaTime.asSeconds();
+
+	m_backgroundSprite.setTextureRect(sf::IntRect(static_cast<int>(backgroundX), static_cast<int>(backgroundY), m_context->m_window->getSize().x, m_context->m_window->getSize().y));
+
 }

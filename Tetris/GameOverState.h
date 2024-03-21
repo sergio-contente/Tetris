@@ -1,8 +1,6 @@
 #ifndef GAMEOVERSTATE_H
 #define GAMEOVERSTATE_H
 
-//
-
 //#include <windows.h>
 
 #include <SFML/Graphics.hpp>
@@ -24,6 +22,8 @@ class GameOverState : public State
 		sf::Text m_HighScoreText;
 		sf::Text m_retryButton;
 		sf::Text m_mainMenuButton;
+		
+		sf::Sprite m_backgroundSprite;
 
 		bool m_isRetryButtonSelected;
 		bool m_isRetryButtonPressed;
@@ -42,6 +42,7 @@ class GameOverState : public State
 		void ProcessInput() override;
 		void Update(const sf::Time& deltaTime) override;
 		void Draw() override;
+
 };
 
 #endif

@@ -77,41 +77,35 @@
       <PreprocessorDefinitions>
       </PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\patog\source\repos\sergio-contente\Tetris\Tetris\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\patog\source\repos\Tetris\Tetris\include;C:\Users\patog\source\repos\Tetris\Tetris\enet\include</AdditionalIncludeDirectories>
+      <IntrinsicFunctions />
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\patog\source\repos\sergio-contente\Tetris\Tetris\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-graphics-d.lib
-;sfml-window-d.lib;
-sfml-system-d.lib;
-sfml-audio-d.lib
-;sfml-network-d.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\patog\source\repos\Tetris\Tetris\lib;C:\Users\patog\source\repos\Tetris\Tetris\enet\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-audio-d.lib;sfml-network-d.lib;enet64.lib;ws2_32.lib;winmm.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <IntrinsicFunctions>
+      </IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>
       </PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\patog\source\repos\sergio-contente\Tetris\Tetris\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\patog\source\repos\Tetris\Tetris\include;C:\Users\patog\source\repos\Tetris\Tetris\enet\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\patog\source\repos\sergio-contente\Tetris\Tetris\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-graphics-d.lib
-;sfml-window-d.lib;
-sfml-system-d.lib;
-sfml-audio-d.lib
-;sfml-network-d.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\patog\source\repos\Tetris\Tetris\lib;C:\Users\patog\source\repos\Tetris\Tetris\enet\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-audio-d.lib;sfml-network-d.lib;enet64.lib;ws2_32.lib;winmm.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -121,39 +115,42 @@ sfml-audio-d.lib
       <PreprocessorDefinitions>
       </PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Tetris\Tetris\include;D:\Tetris\Tetris\enet\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\patog\source\repos\Tetris\Tetris\include;C:\Users\patog\source\repos\Tetris\Tetris\enet\include</AdditionalIncludeDirectories>
+      <IntrinsicFunctions />
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\Tetris\Tetris\enet\lib;D:\Tetris\Tetris\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-audio-d.lib;sfml-network-d.lib;enet64.lib;ws2_32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\patog\source\repos\Tetris\Tetris\lib;C:\Users\patog\source\repos\Tetris\Tetris\enet\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-audio-d.lib;sfml-network-d.lib;enet64.lib;ws2_32.lib;winmm.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <IntrinsicFunctions>
+      </IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>
       </PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Tetris\Tetris\include;D:\Tetris\Tetris\enet\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\patog\source\repos\Tetris\Tetris\include;C:\Users\patog\source\repos\Tetris\Tetris\enet\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\Tetris\Tetris\enet\lib;D:\Tetris\Tetris\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-audio-d.lib;sfml-network-d.lib;enet64.lib;ws2_32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\patog\source\repos\Tetris\Tetris\lib;C:\Users\patog\source\repos\Tetris\Tetris\enet\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-audio-d.lib;sfml-network-d.lib;enet64.lib;ws2_32.lib;winmm.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="ClientGameState.cpp" />
+    <ClCompile Include="Constants.h" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameOverState.cpp" />
     <ClCompile Include="GamePlayState.cpp" />
